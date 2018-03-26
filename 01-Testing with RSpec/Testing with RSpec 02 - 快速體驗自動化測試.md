@@ -8,10 +8,10 @@
 ### 題目說明：FizzBuzz
 
 FizzBuzz 程式是經典的面試考題之一，給一個整數：
-- 整數能被三整除，回傳 Fizz
-- 整數能被三整除，回傳 Buzz
-- 整數能被三和五同時整除，回傳 FizzBuzz
-- 若都不能整除，回傳該整數
+- 整數能被三整除，回傳 Fizz；如果數字是 3，就會回傳 Fizz
+- 整數能被五整除，回傳 Buzz；如果數字是 5，就會回傳 Buzz
+- 整數能被三和五同時整除，回傳 FizzBuzz；如果數字是 15，就會回傳 FizzBuzz
+- 若都不能整除，回傳該整數；若數字是 1，則回傳 1
 
 ### 撰寫 FizzBuzz 程式（第一版）
 
@@ -95,7 +95,7 @@ gem install rspec
 ```
 
 請在 **fizzbuzz.rb** 同個資料夾內，新增一個 `.rspec` 檔，內容如下：
-```diff .rspec
+```
 --format documentation
 --color
 ```
