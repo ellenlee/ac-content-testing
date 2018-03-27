@@ -92,8 +92,8 @@ fizzbuzz(15)  # => 应该得到 FizzBuzz 了
 RSpec 是 Ruby 的軟體套件，是一種測試用的工具，目前非常多 Ruby on Rails 專案使都使用 RSpec 來進行測試。
 
 請各位使用指令安裝 RSpec：
-```
-gem install rspec
+```bash
+[~] $ gem install rspec
 ```
 
 請在 **fizzbuzz.rb** 同個資料夾內，新增一個 `.rspec` 檔，內容如下：

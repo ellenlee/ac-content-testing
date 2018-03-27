@@ -147,8 +147,8 @@ end
 _Path: reverse_integer.rb_
 
 接著，請使用 `rspec` 指令進行測試，指令後要帶入測試程式的檔名：
-```
-rspec reverse_integer_spec.rb
+```bash
+[~] $ rspec reverse_integer_spec.rb
 ```
 
 結果應如下所示：
