@@ -7,26 +7,26 @@
 ### RSpec 指令
 
 安裝 RSpec：
-```
-gem install rspec
+```bash
+[~] $ gem install rspec
 ```
 
 要設定 RSpec 的產出格式需要 **.rspec** 檔，你可以手動創建一個，或使用指令創建 .rspec 檔：
-```
-rspec --init
+```bash
+[~] $ rspec --init
 ```
 **.rspec** 檔主要是讓我們在使用 `rspec` 指令執行測試程式時，帶入**.rspec** 檔內的設定作為副指令，如：
 - `--format documentation`：產出更詳盡的分類和測試案例
 - `--color`：產出結果用顏色區分
 
 若你想認識更多的 rspec 副指令，可用 `--help` 查詢：
-```
-rspec  --help
+```bash
+[~] $ rspec  --help
 ```
 
 執行測試程式：
-```
-rspec filename
+```bash
+[~] $ rspec filename
 ```
 
 ### RSpec 資料夾結構

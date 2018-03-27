@@ -1,6 +1,6 @@
 Q1:
 
-請延續波特買書（Potter Kata）的題目，完成「三本不同集的書打 10% 折扣」的測試案例與測試程式：
+請延續波特買書（Potter Kata）的題目，完成「三本不同集的書打 10% 折扣」的測試案例與測試程式。
 
 - Cover 請放上執行完 rspec 指令後，全部測試案例通過的截圖。
 - 請在 GitHub 欄位裡輸入 GitHub 網址
@@ -8,7 +8,7 @@ Q1:
 
 Q2:
 
-請延續波特買書（Potter Kata）的題目，完成「四本不同集的書打 15% 折扣」的測試案例與測試程式：
+請延續波特買書（Potter Kata）的題目，完成「四本不同集的書打 15% 折扣」的測試案例與測試程式。
 
 - Cover 請放上執行完 rspec 指令後，全部測試案例通過的截圖。
 - 請在 GitHub 欄位裡輸入 GitHub 網址
@@ -30,7 +30,7 @@ Q4:
 
 例子：若輸入 [1,2,2,3,3,3,4,10]，回傳 5。
 
-題目出處：https://leetcode.com/problems/remove-duplicates-from-sorted-array/description/
+在撰寫測試案例時，請記得在你的 it 內寫上你會輸入的資料。
 
 - Cover 請放上執行完 rspec 指令後，全部測試案例通過的截圖。
 - 請在 GitHub 欄位裡輸入 GitHub 網址
