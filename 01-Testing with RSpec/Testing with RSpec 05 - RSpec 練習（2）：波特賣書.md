@@ -52,8 +52,8 @@
 
 請為本題目創建一個資料夾 **rspec_tutorial_2**，並在裡面新增兩個資料夾和三個檔案：
 - **.rspec**
-- **lib/potter_kata.rb**
-- **spec/potter_kata_spec.rb**
+- **lib/cart.rb**
+- **spec/cart_spec.rb**
 
 接著在 **.rspec** 裡加入 `--format documentation` 和 `--color` 設定測試產出格式。
 
@@ -61,7 +61,8 @@
 
 現在我們要來撰寫第一個情境，即沒有打折扣的測試案例。
 
-請打開 **potter_kata_spec.rb***，將要測試的程式拉入其中：
+請打開 **cart_spec.rb**，將要測試的程式拉入其中：
+
 ```Ruby
 require_relative 'cart.rb'
 ```
@@ -266,3 +267,17 @@ _Path: lib/cart.rb_
 以上問題沒有絕對的答案，唯有不斷練習累積經驗，才能在不同的情況下判斷最適當的處理方式。
 
 下個章節，我們會介紹「測試驅動開發」，不過在進入下個章節前，請先完成 Assignment 的題目，累積撰寫測試案例的經驗。
+
+## Quiz
+
+### Q1
+
+針對波特買書，我們實際上要測的方法是 ... ？（多選題）
+
+- <mark>cart.add</mark>
+- <mark>cart.calculate</mark>
+- Cart.new
+- <mark>empty?</mark>
+
+答：1、2、4
+註記：我們並沒有撰寫 new，因此 new 只是前置作業，不算是我們要測試的方法之一。

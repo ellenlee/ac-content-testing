@@ -193,3 +193,49 @@ end
 ![IMG](images/0104-1.png)
 
 除了更熟悉已知的 RSpec 語法，我們也認識了新的語法，下個單元，讓我們使用新語法進行練習吧！
+
+
+## Quiz
+
+### Q1
+
+關於 RSpec 語法，以下何者是正確的？（多選題）
+
+- <mark>context：用於描述情境</mark>
+- <mark>before：在測試案例前進行前置作業</mark>
+- <mark>xit：在進行測試時跳過該測試案例</mark>
+- <mark>it：描述測試案例</mark>
+
+答：1、2、3、4
+註記：所有選項都是正確的，都可以在內文找到。
+
+### Q2
+
+```Ruby
+require_relative "user.rb"
+
+describe "calculate age" do
+    context "age below or equal to 18" do
+
+      before(:each) do
+        @user = User.new()
+      end
+
+      it "return child if age <= 18" do
+        expect(@user.calculate(2000)).to eq("child")
+      end
+
+    end
+  end
+end
+```
+
+就你對以上測試程式的理解，輸入 calculate 的數字若是出生年份，而以上測試案例通過了，請問以下選項中，哪個也會通過？
+
+- <mark>expect(@user.calculate(2001)).to eq("child")</mark>
+- expect(@user.calculate(1985)).to eq("child")
+- expect(@user.calculate(1990)).to eq("child")
+- <mark>expect(@user.calculate(2010)).to eq("child")</mark>
+
+答：1、4
+註記：通過表示年齡小於或等於 18，而輸入的是 2000，表示電腦使用 2018 作為目前年份減去出生年，因此可以用該公式帶入年份進行計算，得出所有能通過的測試案例。

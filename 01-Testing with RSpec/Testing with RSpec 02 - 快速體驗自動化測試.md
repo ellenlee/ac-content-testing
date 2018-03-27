@@ -210,3 +210,53 @@ _Path: fizzbuzz.rb_
 自動化測試，讓我們在寫完程式後可以非常快速地進行檢查時，不至於改壞了程式而不自知。
 
 你已經體驗過自動化測試的妙用，下個單元，我們會用一個 LeetCode 題目帶大家實際使用 RSpec 進行練習！
+
+
+## Quiz
+
+### Q1
+
+```ruby
+require_relative 'leetcode.rb'
+
+describe "leetcode" do
+
+  it "leet 結果為 code" do
+    result = leetcode("leet")
+    expect(result).to eq("code")
+  end
+
+  it "code 結果為 leet" do
+    result = leetcode("code")
+    expect(result).to eq("leet")
+  end
+
+  it "other 結果為 bug" do
+    result = leetcode("other")
+    expect(result).to eq("bug")
+  end
+
+end
+```
+
+以上是一個測試程式，請根據該測試程式從下面選出正確的選項（多選題）
+
+- <mark>要測試的程式檔名為 leetcode.rb</mark>
+- <mark>共有三個測試案例</mark>
+- <mark>如果輸入的不是 leet 或 code，結果為 bug</mark>
+- <mark> leetcode.rb 會把字串 leet 和 code 進行切換</mark>
+
+答：1、2、3、4
+註記：我們會用 require_relative 把程式檔加入，因此 require_relative 旁的就是程式檔名。測試程式有三個 it，因此共有三個測試案例。第一和第二個測試案例會把 leet 和 code 切換，而第三個測試案例會把其他的字串轉換成 bug。
+
+### Q2
+
+以下哪個是執行 fizzbuzz 的自動化測試的 RSpec 指令？（單選題）
+
+- rspec fizzbuzz.rb
+- <mark>rspec fizzbuzz_spec.rb</mark>
+- fizzbuzz(4)
+- gem install rspec
+
+答：2
+註記：內文有明確標記出 fizzbuzz 自動化測試的 RSpec 指令，指令要帶入測試程式，而不是要測試的程式。
