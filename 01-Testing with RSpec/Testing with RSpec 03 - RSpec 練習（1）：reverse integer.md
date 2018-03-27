@@ -11,6 +11,8 @@ Red-Green-Refractor 循環是一種實作測試的流程，在上個單元使用
 - Green - 寫好功能，使原本失敗的測試能通過
 - Refactor - 將程式重構，讓程式碼更精簡，並維持通過的狀態
 
+![image](images/0103-1.png)
+
 我們接下來就會採用 Red-Green-Refractor 循環來進行實作，因此我們會先寫測試案例，然後再撰寫程式的功能，並在期間不斷重構。
 
 ### 設計 Reverse Integer 的測試案例
@@ -147,7 +149,7 @@ rspec reverse_integer_spec.rb
 ```
 
 結果應如下所示：
-![image](images/0103-1.png)
+![image](images/0103-2.png)
 
 綠色的 `123 結果應為 321` 表示第一個測試案例通過了！
 
@@ -169,7 +171,7 @@ _Path: reverse_integer.rb_
 
 請使用 `rspec reverse_integer_spec.rb` 指令進行測試，結果應如下所示：
 
-![image](images/0103-2.png)
+![image](images/0103-3.png)
 
 這次我們多了一個綠色的 `-104 結果應為 -401` 表示第二個測試案例也通過了！
 
@@ -192,7 +194,7 @@ _Path: reverse_integer.rb_
 
 請使用 `rspec reverse_integer_spec.rb` 指令進行測試：
 
-![image](images/0103-3.png)
+![image](images/0103-4.png)
 
 全部都是綠色的文字！表示所有測試案例都通過了！
 
