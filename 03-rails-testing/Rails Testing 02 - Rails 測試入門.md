@@ -28,7 +28,7 @@
 首先我們會完成 model 的 API，顧名思義，竟然是 TDD，我們先寫測試的程式:
 
 ```
-# spec/model/user.rb 
+# spec/model/user.rb
 
 it "should count all user" do
 	expect(User.get_user_count).to eq(0)
@@ -56,7 +56,7 @@ end
 接著是查看使用者有過多少回覆的 API，一樣我們先寫測試:
 
 ```
-# spec/model/user.rb 
+# spec/model/user.rb
 
 it "should count all comments by this user" do
 	user = create(:user)
