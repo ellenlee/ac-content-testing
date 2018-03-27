@@ -1,7 +1,8 @@
 ## RSpec 練習（2）：波特賣書
-> 為物件撰寫測試案例
+> 能夠使用 RSpec 語法撰寫類別的測試案例
+> 能夠使用 Red-Green-Refractor 循環完成程式
 
-你已經懂得撰寫單一功能的測試案例，現在我們要來撰寫情境更複雜的的測試案例，藉由實際的題目練習 RSpec 語法和 Red-Green—Refractor 實作流程。
+你已經懂得撰寫單一功能的測試案例，現在我們要來撰寫情境更複雜的的測試案例，藉由實際題目練習新的 RSpec 語法和 Red-Green—Refractor 循環。
 
 ### 波特賣書（Potter Kata） 題目說明
 
@@ -14,7 +15,7 @@
 
 因此，我們要來寫出一個可以計算出書籍總價的函式。
 
-### 分析波特賣書的輸入與輸出【Ellen，標題名稱我覺得需要你幫忙想】
+### 設計波特買書的測試案例
 
 依照題目的描述，我們先處理兩個比較簡單的情境：不打折和打 5% 折扣的情境。
 
@@ -51,8 +52,8 @@
 
 請為本題目創建一個資料夾 **rspec_tutorial_2**，並在裡面新增兩個資料夾和三個檔案：
 - **.rspec**
-- **lib/potter_kata.rb**
-- **spec/potter_kata_spec.rb**
+- **lib/cart.rb**
+- **spec/cart_spec.rb**
 
 接著在 **.rspec** 裡加入 `--format documentation` 和 `--color` 設定測試產出格式。
 
@@ -60,8 +61,17 @@
 
 現在我們要來撰寫第一個情境，即沒有打折扣的測試案例。
 
-請打開 **potter_kata_spec.rb***，先描述我們要測試的程式：
+請打開 **cart_spec.rb**，將要測試的程式拉入其中：
+
 ```Ruby
+require_relative 'cart.rb'
+```
+_Path: spec/cart_spec.rb_
+
+接著，描述我們要測試的程式：
+```Ruby
+require_relative 'cart.rb'
+
 describe Cart do
 
 end
@@ -77,6 +87,8 @@ _Path: spec/cart_spec.rb_
 由於我們使用物件來計算，因此我們會使用 RSpec 的  `before` 語法，在每個 it 測試前宣告一個 `cart` 物件：
 
 ```Ruby
+require_relative 'cart.rb'
+
 describe Cart do
 
   before :each do
@@ -117,7 +129,7 @@ _Path: spec/cart_spec.rb_
 
 #### 撰寫計算程式
 
-請打開 **cart.rb**，創建一個 `Cart` class，並為這個 class 定義兩個方法：`add` 和 `calculate`：
+請打開 **cart.rb**，創建一個 `Cart` class，並為這個 class 定義 `add` 和 `calculate` 方法。
 - `add` 方法會帶入一個陣列，並存入一個實例變數 `@books` 裡
 - `calculate` 方法會回傳一個書籍的總價
 
@@ -194,7 +206,7 @@ class Cart
     @books = books
   end
 
-  def empty?(books)
+  def empty?(books)                 # 判斷陣列內是否還有書要計算
     empty = true
     for i in books do
       (empty = false) if i > 0
@@ -208,7 +220,7 @@ class Cart
     organize_books = [0,0,0,0,0]    # 一個代表五集哈利波特的陣列，每個陣列內容對應一集哈利波特的數量
 
     for i in @books do
-      organize_books[i-1] += 1      # 將 @books 分類入 organize_books
+      organize_books[i-1] += 1      # 將 @books 分類到 organize_books
     end
 
     combo = []                      # 計算不同組合打折用的陣列
@@ -239,7 +251,7 @@ _Path: lib/cart.rb_
 
 請執行 `rspec cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
 
-![螢幕截圖 2018-03-23 16.56.44](images/0105-2.png)
+![IM2](images/0105-2.png)
 
 ### 小結
 
@@ -255,3 +267,17 @@ _Path: lib/cart.rb_
 以上問題沒有絕對的答案，唯有不斷練習累積經驗，才能在不同的情況下判斷最適當的處理方式。
 
 下個章節，我們會介紹「測試驅動開發」，不過在進入下個章節前，請先完成 Assignment 的題目，累積撰寫測試案例的經驗。
+
+## Quiz
+
+### Q1
+
+針對波特買書，我們實際上要測的方法是 ... ？（多選題）
+
+- <mark>cart.add</mark>
+- <mark>cart.calculate</mark>
+- Cart.new
+- <mark>empty?</mark>
+
+答：1、2、4
+註記：我們並沒有撰寫 new，因此 new 只是前置作業，不算是我們要測試的方法之一。

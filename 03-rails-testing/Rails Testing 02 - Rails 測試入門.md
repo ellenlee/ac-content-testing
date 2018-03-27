@@ -74,7 +74,7 @@ end
 ```
 # model/user.rb
 
-def get_user_count
+def get_comment_count
 	comments.all.size
 end
 ```
@@ -98,7 +98,7 @@ describe "GET dashboard" do
     # part 2
     get :dashboard
     expect(assigns(:user_count)).to eq(user_count)
-    expect(response).to have_content("There are totally #{user_count} users in this website.")
+    expect(response.body).to have_content("There are totally #{user_count} users in this website.")
   end
 end
 ```
