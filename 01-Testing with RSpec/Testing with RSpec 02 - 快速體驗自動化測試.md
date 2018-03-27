@@ -33,6 +33,7 @@ def fizzbuzz(int)
   end
 end
 ```
+_Path: fizzbuzz.rb_
 
 完成了程式，我們通常會手動進行測試，最常見的就是用進入 irb 帶入對應的測試資料。
 
@@ -41,7 +42,7 @@ end
 在終端執行 `irb` 输入指令：
 
 ```
-require_relative './fizzbuzz.rb'
+require_relative 'fizzbuzz.rb'
 fizzbuzz(3)   # => 应该得到 Fizz
 fizzbuzz(5)   # => 应该得到 Buzz
 fizzbuzz(15)  # => 应该得到 FizzBuzz
@@ -72,10 +73,11 @@ def fizzbuzz(int)
   end
 end
 ```
+_Path: fizzbuzz.rb_
 
 再次進入 `irb` 測試程式：
 ```
-require_relative './fizzbuzz.rb'
+require_relative 'fizzbuzz.rb'
 fizzbuzz(3)   # => 应该得到 Fizz
 fizzbuzz(5)   # => 应该得到 Buzz
 fizzbuzz(15)  # => 应该得到 FizzBuzz 了
@@ -83,11 +85,11 @@ fizzbuzz(15)  # => 应该得到 FizzBuzz 了
 
 看起來這次的測試結果好像都對了，你可能還會想再輸入幾個數字試試看。
 
-這個往返檢查和修改程式的過程，相信大家一定都不陌生，自動化測試要達成的目的，就是把這個檢查過程給自動化。
+這個往返檢查和修改程式的過程，相信大家一定都不陌生，自動化測試要達成的目的，就是把這個檢查過程給<span style="color:red">自動化</span>。
 
 ### 使用 RSpec 進行自動化測試
 
-RSpec 是一套 Ruby 的軟體套件，目前非常多 Ruby on Rails 專案使都使用 RSpec 來進行測試。
+RSpec 是 Ruby 的軟體套件，是一種測試用的工具，目前非常多 Ruby on Rails 專案使都使用 RSpec 來進行測試。
 
 請各位使用指令安裝 RSpec：
 ```
@@ -99,11 +101,12 @@ gem install rspec
 --format documentation
 --color
 ```
+_Path: .rspec_
 
-接着再新增一個檔档案 `fizzbuzz_spec.rb`，內容如下：
+接着再新增一個檔案 `fizzbuzz_spec.rb`，內容如下：
 
 ```ruby
-require_relative './fizzbuzz.rb'
+require_relative 'fizzbuzz.rb'
 
 describe "FizzBuzz" do
 
@@ -119,33 +122,38 @@ describe "FizzBuzz" do
 
   it "15 應該是 FizzBuzz" do
     result = fizzbuzz(15)
-    expect(result).to eq('FizzBuzz')     # 结果应该要是 FizzBuzz
+    expect(result).to eq('FizzBuzz') # 结果应该要是 FizzBuzz
   end
 
   it "1 應該是 1" do
     result = fizzbuzz(1)
-    expect(result).to eq(1)      # 结果应该要是 1
+    expect(result).to eq(1)          # 结果应该要是 1
   end
 
 end
 ```
+_Path: fizzbuzz_spec.rb_
 
-在這個檔案裡，每個 `it` 包起來的就是一個測試案例（Test Case），我們會在裡面用 `expect` 方法去檢查結果是否如我們預期。
+在這個檔案裡，每個 `it` 語法包起來的就是一個測試案例（Test Case），我們會在裡面用 `expect` 方法去檢查結果是否如我們所預期。
 
-這裡除了測試 3、5、15 外，也多新增了 1 的測試案例，由於 1 不能被 3 或 5 整除，其其結果應為 `1`。
+這裡除了測試 3、5、15 外，也多新增了 1 的測試案例，由於 1 不能被 3 或 5 整除，其結果應為 `1`。
 
-#### 通過與失敗：Green or Red？
+#### 通過與失敗：Green & Red
 
-至此我們共有三個檔案：**.rspec**、**fizzbuzz.rb**、**fizzbuzz_rspec.rb**，這些檔案必須在同一個資料夾裡。
+至此我們共有三個檔案：**.rspec**、**fizzbuzz.rb**、**fizzbuzz_rspec.rb**。；請確認這三個檔案都在同一個資料夾裡。
 
-請執行以下指令使用 RSpec 進行自動化測試：
+接著在該資料夾下，使用 RSpec 指令進行自動化測試：
 ```bash
-[~] $ rspec leap_year_spec.rb
+[~] $ rspec fizzbuzz_spec.rb
 ```
 
 ![image](images/0102-1.png)
 
-紅色的字表示有測試案例沒有通過，它指出我們的數字為 1 的結果不正確，預期是 1 但卻得到 nil。這很正常，因為我們剛撰寫的 fizzbuzz 程式並沒有考量到整數不能被 3 或 5 整除的情況。
+執行完 RSpec 指令後，除了一般系統訊息會是白色外，還有兩種顏色分別代表了測試的成功與失敗：
+- 測試成功 - 綠色（Green）
+- 測試失敗 - 紅色（Red）
+
+紅色訊息表示該測試案例沒有通過，它指出我們的數字為 1 的結果不正確，預期是 1 但卻得到 nil。這很正常，因為我們剛撰寫的 fizzbuzz 程式並沒有考量到整數不能被 3 或 5 整除的情況。
 
 ### 修改 FizzBuzz 程式（完成版）
 
@@ -167,16 +175,18 @@ def fizzbuzz(int)
   return int
 end
 ```
+_Path: fizzbuzz.rb_
 
 再執行一次 `rspec fizzbuzz_spec.rb`，結果應如下所示：
 
 ![image](images/0102-2.png)
 
-當你看到終端上都是綠色時，表示這四個測試案例都通過了，如果你對程式還有疑慮，是否考慮得不夠完善，你也可以增加更多的測試資料來檢查。
+當你看到終端上都是綠色時，表示四個測試案例都通過了，如果你對程式還有疑慮，是否考慮得不夠完善，你也可以增加更多的測試資料來檢查。
 
 ## 重構 FizzBuzz 程式（最終版）
 
 最後，雖然程式是完成了，但程式碼本身不夠精簡，我們需要替 FizzBuzz 重構一下。
+
 重構，即是在不影響程式功能的情況下讓程式碼變得「漂亮」，例如 FizzBuzz 程式可以修改成以下內容：
 
 
@@ -189,13 +199,14 @@ def fizzbuzz(int)
   return int
 end
 ```
+_Path: fizzbuzz.rb_
 
-那現在要怎麼確認改稱這樣，結果還是正確的呢？
+那要怎麼確認改成這樣，結果還是正確呢？
 
-只要再執行一次就可以了 `rspec fizzbuzz_spec.rb` 指令檢查測試結果就行了！是不是很方便？！這就是自動化測試！
+只要再執行一次 `rspec fizzbuzz_spec.rb` 指令檢查測試結果就行了！是不是很方便？！這就是自動化測試！
 
 ![image](images/0102-2.png)
 
-自動化測試，讓我們在重構可以非常快速進行檢查時，不至於改壞了程式而不自知。
+自動化測試，讓我們在寫完程式後可以非常快速地進行檢查時，不至於改壞了程式而不自知。
 
 你已經體驗過自動化測試的妙用，下個單元，我們會用一個 LeetCode 題目帶大家實際使用 RSpec 進行練習！
