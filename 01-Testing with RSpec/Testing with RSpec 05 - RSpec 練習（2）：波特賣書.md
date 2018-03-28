@@ -13,15 +13,23 @@
 - 購買四本不同集的哈利波特可以打 20% 折扣
 - 購買五本不同集的哈利波特可以打 25% 折扣
 
-因此，我們要來寫出一個可以計算出書籍總價的函式。
+因此，我們要來寫一個可以計算出書籍總價的功能。
 
-#### 輸入函式的資料：陣列
+#### 輸入的資料：Hash
 
-這個函式會輸入一個代表書籍的陣列，如： `[1,2,2,2]` 表示有 1 本第一集和 3 本第二集的哈利波特。
+我們會輸入一個代表書籍的 Hash，如果客戶買了 1 本第一集的哈利波特和 3 本第二集的哈利波特，資料會如下所示：
+```Ruby
+items = { "1st": 1, "2nd": 3, "3rd": 0, "4th": 0, "5th": 0 }
+```
+Key 代表的是哪一集的哈利波特，如 `1st` 是第一集，Value 代表的是買了多少本。
 
-#### 函式輸出的結果：總價
+#### 輸出的結果：總價
 
-陣列 `[1,2,2,2]` 經過函式演算後，由於 1 + 2 為一組，折扣 5% 後價格為 190，再加上兩本書總價為 200，產出的結果會是 190 + 200 = 390 元。
+如果將以上資料經過程式計算，因有兩本不同集的書，所以該第一集和第二集的書合計後會打折扣 5%，而剩餘兩本單一集的書照原價計算：
+
+|兩集一組| 單集 2 本 | 總價  |  
+|---|---|---|
+| （100 + 100）* 0.95 | 2 * 100  | 390 |
 
 ### 設計波特買書的測試案例
 
@@ -53,11 +61,11 @@
 | 書籍組合 | 公式 | 總價 |  
 |---|---|---|
 | 1 本第一集、1 本第二集 | ( 100 + 100 ) * 0.95 | 190 |
-| 2 本第一集、2 本第二集 | ( 200 + 200 ) * 0.95 | 380 |
+| 2 本第一集、2 本第二集 | 2 * ( 100 + 100 ) * 0.95 | 380 |
 | 1 本第一集、2 本第二集 | ( 100 + 100 ) * 0.95 + 100 | 290 |
-| 2 本第一集、3 本第二集 | ( 200 + 200 ) * 0.95 + 100 | 480 |
+| 2 本第一集、3 本第二集 | 2 * ( 200 + 200 ) * 0.95 + 100 | 480 |
 
-其他情境的測試案例可以此類推，讓我們來運用 Red-Green-Refractor 循環來完成上述測試案例和程式功能，過程中請謹記以下三個準則:
+以此類推，讓我們來運用 Red-Green-Refractor 循環來完成上述測試案例和程式功能，過程中請謹記以下三個準則:
 - 請先寫好測試案例，才開始實作程式功能
 - 每次只新增一個測試情境，不用一次新增多個測試情境
 - 每次實作功能時，只需要剛剛好通過測試即可，不多也不少
@@ -92,13 +100,9 @@ end
 ```
 _Path: spec/cart_spec.rb_
 
-我們會使用 `Cart`（購物車）物件來計算書的總價，使用 `cart.add` 方法把代表書籍的陣列放入，然後用 `cart.calculate` 方法計算出書的總價。
+我們會使用 `Cart`（購物車）物件撰寫這個功能，其中 `cart.add` 方法會用於取得書籍的資料，然後用 `cart.calculate` 方法計算出書的總價。
 
-代表書籍在的陣列，每個陣列內容代表一本書，其數字代表第幾集：
-- `[1]` ：一本第一集的哈利波特
-- `[1,1,1]` ：三本第一集的哈利波特
-
-由於我們使用物件來計算，因此我們會使用 RSpec 的  `before` 語法，在每個 it 測試前宣告一個 `cart` 物件：
+由於我們使用物件來計算，因此要先用 RSpec 的  `before` 語法，在每個 it 測試前宣告一個 `cart` 物件，用來取用其方法：
 
 ```Ruby
 require_relative 'cart.rb'
@@ -124,39 +128,45 @@ describe Cart do
 
   context "第一種情境：不打折" do
 
-    it "第一集買 1 本 : [1]" do
-      @cart.add([1])
+    it "第一集買 1 本" do
+      @cart.add({ "1st": 1, "2nd": 0, "3rd": 0, "4th": 0, "5th": 0 })
       expect(@cart.calculate).to eq(100)
     end
 
-    it "第一集買 3 本 : [1,1,1]" do
-      @cart.add([1,1,1])
+    it "第一集買 3 本" do
+      @cart.add({ "1st": 3, "2nd": 0, "3rd": 0, "4th": 0, "5th": 0 })
       expect(@cart.calculate).to eq(300)
     end
 
   end
+
 end
 ```
 _Path: spec/cart_spec.rb_
 
-小撇步：你可以在 `it` 內的字串寫上你輸入的資料，這樣在測試時會更容易檢索自己輸入了什麼資料，如第一個測試案例的 `it`：`第一集買 1 本 : [1]`。
-
 #### 撰寫計算程式
 
-請打開 **cart.rb**，創建一個 `Cart` class，並為這個 class 定義 `add` 和 `calculate` 方法。
-- `add` 方法會帶入一個陣列，並存入一個實例變數 `@books` 裡
-- `calculate` 方法會回傳一個書籍的總價
+請打開 **cart.rb**，創建一個 `Cart` class，並為這個 class 定義 `PRICE` 、 `add` 和 `calculate`：
+- `PRICE` 常數：代表每本書的單價
+- `add` 方法：帶入資料，經處理後存入 `@ordered_items`
+- `calculate` 方法：會回傳一個書籍的總價
 
 請完成以上程式碼的撰寫，內容應如下所示：
 ```Ruby
 class Cart
 
-  def add(books)
-    @books = books            # 把輸入的資料存起來
+  PRICE = 100     # 每本書的單價是 100 元
+
+  def add(items)
+    @ordered_items = items.map{ |key,value| value }   # 把資料由 Hash 轉成陣列
   end
 
-  def calculate
-    return @books.size * 100  # 根據書籍多少回傳總價
+  def calculate    # 計算客戶所買的書本總價
+    total = 0
+    for item in @ordered_items do         # 把書拿出來計算
+      total = total + item * PRICE
+    end
+    return total
   end
 
 end
@@ -168,15 +178,15 @@ _Path: lib/cart.rb_
 
 請執行 `rspec cart_spec.rb` 指令測試你的程式碼，確認結果為綠色。
 
-![螢幕截圖 2018-03-23 16.56.44](images/0105-1.png)
+![1](images/0105-1.png)
 
-成功通過測試後，讓我們繼續撰寫下一個情境的測試案例。
+由於不打折的功能較為簡單，我們一次通過了兩個測試案例，讓我們繼續撰寫下一個情境的測試案例。
 
 ### 撰寫「打 5% 折扣」的測試案例與程式
 
 #### 撰寫測試案例
 
-依照之前定義好的三個測試案例，請使用 `context` 描述「打 5% 折扣」的情境，並使用 `it`、`expect` 和 `to eq` 撰寫測試案例：
+依照之前定義好的四個測試案例，請使用 `context` 描述「打 5% 折扣」的情境，並使用 `it`、`expect` 和 `to eq` 撰寫測試案例：
 
 ```Ruby
 require_relative './cart.rb'
@@ -188,23 +198,23 @@ describe Cart do
 
   context "第二種情境：打 5% 折扣" do
 
-    it "第一集買 1 本、第二集買 1 本 : [1,2]" do
-      @cart.add([1,2])
+    it "第一集買 1 本、第二集買 1 本" do
+      @cart.add({ "1st": 1, "2nd": 1, "3rd": 0, "4th": 0, "5th": 0 })
       expect(@cart.calculate).to eq(190)
     end
 
-    it "第一集買 2 本、第二集買 2 本 : [1,1,2,2]" do
-      @cart.add([1,1,2,2])
+    it "第一集買 2 本、第二集買 2 本" do
+      @cart.add({ "1st": 2, "2nd": 2, "3rd": 0, "4th": 0, "5th": 0 })
       expect(@cart.calculate).to eq(380)
     end
 
-    it "第一集買 1 本、第二集買 2 本 : [1,2,2]" do
-      @cart.add([1,2,2])
+    it "第一集買 1 本、第二集買 2 本" do
+      @cart.add({ "1st": 1, "2nd": 2, "3rd": 0, "4th": 0, "5th": 0 })
       expect(@cart.calculate).to eq(290)
     end
 
-    it "第一集買 2 本、第二集買 3 本 : [1,1,2,2,2]" do
-      @cart.add([1,1,2,2,2])
+    it "第一集買 2 本、第二集買 3 本" do
+      @cart.add({ "1st": 2, "2nd": 3, "3rd": 0, "4th": 0, "5th": 0 })
       expect(@cart.calculate).to eq(480)
     end
 
@@ -214,53 +224,38 @@ end
 ```
 _Path: spec/cart_spec.rb_
 
-#### 撰寫計算程式
+#### 撰寫「買 1 組」的計算程式
+
+由於第二個情境較為複雜，所以這次會依照每個 `it` 的需求撰寫功能，只求剛剛好通過情境二的第一個測試案例：只買 1 組。
 
 請打開 **cart.rb**，在 `calculate` 繼續撰寫「打 5% 折扣」的功能，以下提供一完成了第二個情境的程式碼供參考：
 
 ```Ruby
 class Cart
 
-  def add(books)
-    @books = books
+  PRICE = 100     # 每本書的單價是 100 元
+
+  def add(items)
+    @ordered_items = items.map{ |key,value| value }   # 把資料由 Hash 轉成陣列
   end
 
-  def empty?(books)                 # 判斷陣列內是否還有書要計算
-    empty = true
-    for i in books do
-      (empty = false) if i > 0
-    end
-    empty
-  end
+  def calculate    # 計算客戶所買的書本總價
 
-  def calculate
+    total = 0
+    @ordered_items = @ordered_items.delete_if{ |i| i == 0 } # 刪除客戶沒有買的哈利波特集數
 
-    price = 0
-    organize_books = [0,0,0,0,0]    # 一個代表五集哈利波特的陣列，每個陣列內容對應一集哈利波特的數量
-
-    for i in @books do
-      organize_books[i-1] += 1      # 將 @books 分類到 organize_books
-    end
-
-    combo = []                      # 計算不同組合打折用的陣列
-
-    while !empty?(organize_books)   # 當陣列裡還有書時才執行
-      combo.push(5 - organize_books.count(0)) # 用 0 的數量反向找出打折組合
-      5.times do |i|                
-        organize_books[i] -= 1 if organize_books[i] > 0 # # 陣列裡的書籍數量 - 1，但最小是 0，不會超過
+    if @ordered_items.size == 2       # 如果買了一組，價格要打 5% 折扣
+      total = total + 2 * PRICE * 0.95
+    else
+      for item in @ordered_items do   # 如果只買了單集 1 本或多本，就原價計算
+      end
+        total = total + item * PRICE
       end
     end
 
-    for i in 0...combo.size do      # 把所有打折組合吐出來
-      if combo[i] == 1              # 只有單本書時不打折 = 100
-        price += 100
-      elsif combo[i] == 2           # 有兩本不同書時打五折 = 190
-        price += 190
-      end
-    end
-    return price
-
+    return total
   end
+
 end
 ```
 
@@ -271,6 +266,146 @@ _Path: lib/cart.rb_
 請執行 `rspec cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
 
  ![Image](images/0105-2.png)
+
+ 你會發現，除了之前已經通過的測試案例外，我們在第二個情境裡的第一個測試案例也通過了，但由於我們只針對「買 1 組」的情境撰寫程式，情境二裡的另外三個測試案例都呈現紅色，表示沒有通過。
+
+ #### 撰寫「買多組」的計算程式
+
+接著讓我們要來撰寫情境二第二個測試案例，這次我們要完成「買多組」的功能，但不用擔心會多出單一集的書，我們輸入的資料只有兩種可能性：
+- 單組或多組
+- 單一集 1 本或多本
+
+完成的程式碼內容如下：
+ ```Ruby
+class Cart
+
+  PRICE = 100     # 每本書的單價是 100 元
+
+  def add(items)
+    @ordered_items = items.map{ |key,value| value }   # 把資料由 Hash 轉成陣列
+  end
+
+  def calculate    # 計算客戶所買的書本總價
+
+    total = 0
+
+    @ordered_items = @ordered_items.delete_if{ |i| i == 0 } # 刪除客戶沒有買的哈利波特集數
+
+    if @ordered_items.size == 2       # 如果客戶買了兩集的哈利波特
+      while @ordered_items.size > 0   # 當還有書籍時
+        total = total + 2 * PRICE * 0.95   # 把客戶買的一組哈利波特打折後計入總價
+        @ordered_items[0] -= 1       # 刪除已計算過的書籍       
+        @ordered_items[1] -= 1       # 刪除已計算過的書籍
+        @ordered_items = @ordered_items.delete_if{ |i| i == 0 }
+      end
+    else
+      for item in @ordered_items do   # 客戶只買了單一集的哈利波特
+        total = total + item * PRICE
+      end
+    end
+
+    return total
+  end
+
+end
+
+```
+
+_Path: lib/cart.rb_
+
+#### 進行測試
+
+請執行 `rspec cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
+
+  ![Image](images/0105-3.png)
+
+你已經通過了情境二的第二個測試案例，目前還有兩個測試案例的功能尚未完成，讓我們繼續完成程式功能。
+
+ #### 撰寫「買一組 + 單集 1 本」的計算程式
+
+情境二的第三個測試案例，必須能處理出現單組和單集 1 本的情況，同時將之前的測試案例也維持在通過的狀態。
+
+請繼續撰寫程式功能，以下提供完成的範例程式碼：
+ ```Ruby
+ class Cart
+
+   PRICE = 100     # 每本書的單價是 100 元
+
+   def add(items)
+     @ordered_items = items.map{ |key,value| value }   # 把資料由 Hash 轉成陣列
+   end
+
+   def calculate    # 計算客戶所買的書本總價
+
+     total = 0
+
+     @ordered_items = @ordered_items.delete_if{ |i| i == 0 } # 刪除客戶沒有買的哈利波特集數
+
+     while @ordered_items.size > 0      # 當客戶還有書籍還沒計入時
+       if @ordered_items.size == 2      # 如果客戶買了兩集的哈利波特
+         total = total + 2 * PRICE * 0.95   # 把客戶買的一組哈利波特打折後計入總價
+         @ordered_items[0] -= 1       # 刪除已計算過的書籍       
+         @ordered_items[1] -= 1       # 刪除已計算過的書籍
+         @ordered_items = @ordered_items.delete_if{ |i| i == 0 }
+       else
+         total = total + PRICE        # 把客戶賣得單集 1 本哈利波特計入總價
+         @ordered_items[0] -= 1       # 刪除已計算過的書籍
+         @ordered_items = @ordered_items.delete_if{ |i| i == 0 }
+       end
+     end
+
+     return total
+   end
+
+ end
+
+```
+
+_Path: lib/cart.rb_
+
+#### 進行測試
+
+請執行 `rspec cart_spec.rb` 指令測試你的程式碼：
+
+![Image](images/0105-4.png)
+
+恭喜你！雖然我們只是針對第三個測試案例撰寫程式功能，但也剛巧完成了第四個測試案例的功能，因此所有測試案例全數通過！
+
+### 重構「不打折」和「打 5% 折扣」程式碼
+
+程式碼雖然完成了，但仍有點雜亂，有許多重複的部分，有些程式碼的位置也不是很合適，有些程式碼則可以組合在一起，讓整個程式碼看起來更精簡和漂亮，讓我們來重構一下程式碼。
+
+以下是重構後的程式碼：
+```Ruby
+class Cart
+
+  PRICE = 100
+
+  def add(items)
+    @ordered_items = items.map{ |key,value| value }.delete_if{ |i| i == 0 } #將資料轉換為陣列後，刪除客戶沒有買的哈利波特集數
+  end
+
+  def calculate
+
+    total = 0
+
+    while @ordered_items.size > 0         # 當客戶還有書籍尚未結帳時
+      if @ordered_items.size == 2
+        total = total + 2 * PRICE * 0.95  # 客戶買了一組哈利波特
+      else
+        total = total + PRICE             # 客戶買了單一本哈利波特
+      end
+      @ordered_items = @ordered_items.map{ |i| i -= 1 } # 刪除已計算過的書籍
+      @ordered_items = @ordered_items.delete_if{ |i| i == 0 } # 把已經結完的集數刪除
+    end
+
+    return total
+  end
+
+end
+```
+
+完成後，請執行 `rspec cart_spec.rb` 指令測試重構後的程式碼，確保在你重構之後所有測試案例還是維持在綠色！
 
 ### 小結
 
@@ -296,7 +431,7 @@ _Path: lib/cart.rb_
 - <mark>cart.add</mark>
 - <mark>cart.calculate</mark>
 - Cart.new
-- <mark>empty?</mark>
+- PRICE # QUIZ 改了
 
-答：1、2、4
-註記：我們並沒有撰寫 new，因此 new 只是前置作業，不算是我們要測試的方法之一。
+答：1、2
+註記：我們並沒有撰寫 new，因此 new 只是前置作業，而 PRICE 不是方法，只是屬性設定，因此這兩個選項不是我們要測試的方法。
