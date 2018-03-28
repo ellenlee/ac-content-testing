@@ -86,13 +86,13 @@ Key 代表的是哪一集的哈利波特，如 `1st` 是第一集，Value 代表
 請打開 **cart_spec.rb**，將要測試的程式拉入其中：
 
 ```Ruby
-require_relative 'cart.rb'
+require_relative '../lib/cart.rb'
 ```
 _Path: spec/cart_spec.rb_
 
 接著，描述我們要測試的程式：
 ```Ruby
-require_relative 'cart.rb'
+require_relative '../lib/cart.rb'
 
 describe Cart do
 
@@ -105,7 +105,7 @@ _Path: spec/cart_spec.rb_
 由於我們使用物件來計算，因此要先用 RSpec 的  `before` 語法，在每個 it 測試前宣告一個 `cart` 物件，用來取用其方法：
 
 ```Ruby
-require_relative 'cart.rb'
+require_relative '../lib/cart.rb'
 
 describe Cart do
 
@@ -120,6 +120,8 @@ _Path: spec/cart_spec.rb_
 接著，使用 `context` 語法描述情境，在該情境內使用 `it`、`expect` 和 `to eq` 語法撰寫兩個測試案例：
 
 ```Ruby
+require_relative '../lib/cart.rb'
+
 describe Cart do
 
   before :each do
@@ -189,7 +191,7 @@ _Path: lib/cart.rb_
 依照之前定義好的四個測試案例，請使用 `context` 描述「打 5% 折扣」的情境，並使用 `it`、`expect` 和 `to eq` 撰寫測試案例：
 
 ```Ruby
-require_relative './cart.rb'
+require_relative '../lib/cart.rb'
 
 describe Cart do
 
@@ -308,7 +310,6 @@ class Cart
   end
 
 end
-
 ```
 
 _Path: lib/cart.rb_
