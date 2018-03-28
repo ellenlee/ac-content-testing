@@ -179,8 +179,8 @@ describe "將整數反轉過來" do
     expect(result).to eq(-401)
   end
 
-  xit "4611686018427387906 結果應為 0" do
-    result = reverse_integer(4611686018427387906)
+  xit "2147483650 結果應為 0" do
+    result = reverse_integer(2147483650)
     expect(result).to eq(0)
   end
 
