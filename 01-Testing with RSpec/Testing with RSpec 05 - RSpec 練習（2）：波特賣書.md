@@ -178,7 +178,7 @@ _Path: lib/cart.rb_
 
 #### 進行測試
 
-請執行 `rspec cart_spec.rb` 指令測試你的程式碼，確認結果為綠色。
+請執行 `rspec spec/cart_spec.rb` 指令測試你的程式碼，確認結果為綠色。
 
 ![1](images/0105-1.png)
 
@@ -265,7 +265,7 @@ _Path: lib/cart.rb_
 
 #### 進行測試
 
-請執行 `rspec cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
+請執行 `rspec spec/cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
 
  ![Image](images/0105-2.png)
 
@@ -316,9 +316,9 @@ _Path: lib/cart.rb_
 
 #### 進行測試
 
-請執行 `rspec cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
+請執行 `rspec spec/cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
 
-  ![Image](images/0105-3.png)
+![Image](images/0105-3.png)
 
 你已經通過了情境二的第二個測試案例，目前還有兩個測試案例的功能尚未完成，讓我們繼續完成程式功能。
 
@@ -366,7 +366,7 @@ _Path: lib/cart.rb_
 
 #### 進行測試
 
-請執行 `rspec cart_spec.rb` 指令測試你的程式碼：
+請執行 `rspec spec/cart_spec.rb` 指令測試你的程式碼：
 
 ![Image](images/0105-4.png)
 
@@ -406,7 +406,7 @@ class Cart
 end
 ```
 
-完成後，請執行 `rspec cart_spec.rb` 指令測試重構後的程式碼，確保在你重構之後所有測試案例還是維持在綠色！
+完成後，請執行 `rspec spec/cart_spec.rb` 指令測試重構後的程式碼，確保在你重構之後所有測試案例還是維持在綠色！
 
 ### 小結
 
