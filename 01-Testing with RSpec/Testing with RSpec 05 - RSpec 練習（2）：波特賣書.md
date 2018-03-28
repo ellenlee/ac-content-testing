@@ -1,4 +1,4 @@
-## RSpec 練習（2）：波特賣書
+## RSpec 實作（2）：波特賣書
 > 能夠使用 RSpec 語法撰寫類別的測試案例
 > 能夠使用 Red-Green-Refractor 循環完成程式
 

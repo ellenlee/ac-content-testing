@@ -1,4 +1,4 @@
-## RSpec 與實作（1）：Reverse Integer
+## RSpec 實作（1）：Reverse Integer
 > 能夠使用基本的 RSpec 語法撰寫測試案例
 > 能夠使用 Red-Green-Refractor 循環完成程式
 
