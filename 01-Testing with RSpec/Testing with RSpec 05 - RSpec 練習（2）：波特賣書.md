@@ -95,7 +95,7 @@ Key 代表的是哪一集的哈利波特，如 `1st` 是第一集，Value 代表
 - **.rspec**
 - **lib/cart.rb**
 - **spec/cart_spec.rb**
-- **Gemfile** 和 **Gemfile.lock** 
+- **Gemfile** 和 **Gemfile.lock**
 
 我們會宣告一個 Cart class 來管理買書與計價的方法，你可以把這個類別當成一個擴充模組看待，所以習慣上會用一個叫名 **lib** 的資料夾來管理這些模組，也就是「函式庫」（library）。至於測試檔就放在 **spec** 的資料夾裡，意思是「規格」。
 
@@ -157,7 +157,9 @@ end
 _Path: spec/cart_spec.rb_
 
 比較需要注意的是，你需要使用物件導向的形式，先宣告出 `Cart` 物件實例，然後呼叫該實例的方法。
-此時因為你還沒有撰寫任何程式，如果在終端機執行 `rspec spec/cart_spec.rb`，結果會是一片紅燈。
+此時因為你還沒有撰寫任何程式，如果在終端機執行 `rspec spec/cart_spec.rb`，結果會是一片紅燈：
+
+![image](images/0105-1.png)
 
 #### 撰寫計算程式
 
@@ -190,7 +192,7 @@ _Path: lib/cart.rb_
 
 寫好程式之後，我們來試著執行 `rspec spec/cart_spec.rb` 指令測試你的程式碼，結果亮起了綠燈：
 
-![1](images/arch-help.png)
+![image](images/0105-2.png)
 
 由於不打折的功能較為簡單，我們一次通過了兩個測試案例。
 
@@ -250,7 +252,7 @@ _Path: spec/cart_spec.rb_
 
 請執行 `rspec spec/art_spec.rb` 指令測試你的程式碼，你會看見輸出結果多了一個階層：
 
-![1](images/0105-1.png)
+![image](images/0105-3.png)
 
 
 ### 「打 5% 折扣」測試與功能實作
@@ -332,7 +334,7 @@ _Path: lib/cart.rb_
 
 執行 `rspec spec/cart_spec.rb`：
 
- ![Image](images/0105-2.png)
+ ![Image](images/0105-4.png)
 
 我們在第二個情境裡的第一個測試案例也通過了，並且沒有破壞到第一組情境，然而，情境二裡的另外三個測試案例還沒沒有通過。
 
@@ -378,7 +380,7 @@ _Path: lib/cart.rb_
 
 執行 `rspec spec/cart_spec.rb` 指令測試你的程式碼，通過了情境二的第二組案例。
 
-![Image](images/0105-3.png)
+![Image](images/0105-5.png)
 
 #### 案例：要打折和不打折的組合
 
@@ -420,7 +422,7 @@ _Path: lib/cart.rb_
 
 執行 `rspec spec/cart_spec.rb`：
 
-![Image](images/0105-4.png)
+![Image](images/0105-6.png)
 
 恭喜你！雖然我們只是針對第三個測試案例撰寫程式功能，但也剛巧完成了第四個測試案例的功能，因此所有測試案例全數通過！
 
@@ -458,7 +460,7 @@ end
 
 完成後，請執行 `rspec spec/cart_spec.rb` 指令測試重構後的程式碼，確保在你重構之後所有測試案例還是維持在綠色！
 
-![Image](images/0105-4.png)
+![Image](images/0105-6.png)
 
 ### 小結
 
