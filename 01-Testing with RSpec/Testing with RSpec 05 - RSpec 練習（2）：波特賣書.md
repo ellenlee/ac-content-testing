@@ -103,11 +103,12 @@ Key 代表的是哪一集的哈利波特，如 `1st` 是第一集，Value 代表
 --format documentation
 --color
 ```
+_Path: .rspec_
 
 然後先把主程式和測試檔連結起來，請你打開 **cart_spec.rb**，將要測試的程式拉入其中，並使用 `describe` 規劃出一個程式碼區塊：
 
 ```Ruby
-require_relative 'cart.rb'
+require_relative '../lib/cart.rb'
 
 describe Cart do
 
@@ -125,6 +126,8 @@ _Path: spec/cart_spec.rb_
 讓我們使用 `it`、`expect` 和 `to eq` 來呈現之前定義好的測試案例：
 
 ```Ruby
+require_relative '../lib/cart.rb'
+
 describe Cart do
 
   it "第一集買 1 本" do
@@ -178,7 +181,7 @@ _Path: lib/cart.rb_
 
 #### 進行測試
 
-請執行 `rspec cart_spec.rb` 指令測試你的程式碼，確認結果為綠色。
+請執行 `rspec spec/cart_spec.rb` 指令測試你的程式碼，確認結果為綠色。
 
 ![1](images/0105-1.png)
 
@@ -250,7 +253,7 @@ _Path: spec/cart_spec.rb_
 依照之前定義好的四個測試案例，請使用 `context` 描述「打 5% 折扣」的情境，並使用 `it`、`expect` 和 `to eq` 撰寫測試案例：
 
 ```Ruby
-require_relative './cart.rb'
+require_relative '../lib/cart.rb'
 
 describe Cart do
 
@@ -324,7 +327,7 @@ _Path: lib/cart.rb_
 
 #### 進行測試
 
-請執行 `rspec cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
+請執行 `rspec spec/cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
 
  ![Image](images/0105-2.png)
 
@@ -369,16 +372,15 @@ class Cart
   end
 
 end
-
 ```
 
 _Path: lib/cart.rb_
 
 #### 進行測試
 
-請執行 `rspec cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
+請執行 `rspec spec/cart_spec.rb` 指令測試你的程式碼，確認結果全為綠色。
 
-  ![Image](images/0105-3.png)
+![Image](images/0105-3.png)
 
 你已經通過了情境二的第二個測試案例，目前還有兩個測試案例的功能尚未完成，讓我們繼續完成程式功能。
 
@@ -426,7 +428,7 @@ _Path: lib/cart.rb_
 
 #### 進行測試
 
-請執行 `rspec cart_spec.rb` 指令測試你的程式碼：
+請執行 `rspec spec/cart_spec.rb` 指令測試你的程式碼：
 
 ![Image](images/0105-4.png)
 
@@ -466,7 +468,7 @@ class Cart
 end
 ```
 
-完成後，請執行 `rspec cart_spec.rb` 指令測試重構後的程式碼，確保在你重構之後所有測試案例還是維持在綠色！
+完成後，請執行 `rspec spec/cart_spec.rb` 指令測試重構後的程式碼，確保在你重構之後所有測試案例還是維持在綠色！
 
 ### 小結
 
