@@ -30,25 +30,27 @@ Red-Green-Refractor 循環是一種實作測試的流程，在 RSpec 輸出測�
 
 因此，我們要來寫一個可以計算出書籍總價的功能。
 
-#### 輸入的資料：Hash
+#### 定義輸入資料：Hash
 
 我們會輸入一個代表書籍的 Hash，如果客戶買了 1 本第一集的哈利波特和 3 本第二集的哈利波特，資料會如下所示：
 ```Ruby
-items = { "1st": 1, "2nd": 3, "3rd": 0, "4th": 0, "5th": 0 }
+items = { "1st" => 1, "2nd" => 3, "3rd" => 0, "4th" => 0, "5th" => 0 }
 ```
 Key 代表的是哪一集的哈利波特，如 `1st` 是第一集，Value 代表的是買了多少本。
 
-#### 輸出的結果：總價
+#### 定義輸出結果：總價
 
-如果將以上資料經過程式計算，因有兩本不同集的書，所以該第一集和第二集的書合計後會打折扣 5%，而剩餘兩本單一集的書照原價計算：
+將上述 Hash 傳入程式，經過運算後，最後會回傳一個正整數，代表總價。
 
-|兩集一組| 單集 2 本 | 總價  |  
+運算過程會去分析哪些書要打折、哪些書照原價，例如，若依照上述的 Hash 資料，因為買了兩本不同集的書 （1st & 2nd），這一組要折扣 5%，而剩餘的書依原價計算：
+
+|折扣組合| 依原價 | 總價  |  
 |---|---|---|
 | （100 + 100）* 0.95 | 2 * 100  | 390 |
 
-### 設計波特買書的測試案例
+### 設計測試案例
 
-依照題目的描述，我們先處理兩個比較簡單的情境：不打折和打 5% 折扣的情境。
+在本單元裡，我們會示範「不打折」和「打 5% 折扣」的情境，剩下的情境會留作 Assignment。
 
 #### 情境一：不打折
 
@@ -73,100 +75,81 @@ Key 代表的是哪一集的哈利波特，如 `1st` 是第一集，Value 代表
 
 其透過函式計算出的總價應如下表所示：
 
-| 書籍組合 | 公式 | 總價 |  
+| 書籍組合(輸入值) | 公式 | 總價(輸出值) |  
 |---|---|---|
-| 1 本第一集、1 本第二集 | ( 100 + 100 ) * 0.95 | 190 |
-| 2 本第一集、2 本第二集 | 2 * ( 100 + 100 ) * 0.95 | 380 |
-| 1 本第一集、2 本第二集 | ( 100 + 100 ) * 0.95 + 100 | 290 |
-| 2 本第一集、3 本第二集 | 2 * ( 200 + 200 ) * 0.95 + 100 | 480 |
+| `{ "1st" => 1, "2nd" => 1}` | ( 100 + 100 ) * 0.95 | 190 |
+| `{ "1st" => 2, "2nd" => 2}` | 2 * ( 100 + 100 ) * 0.95 | 380 |
+| `{ "1st" => 1, "2nd" => 2}` | ( 100 + 100 ) * 0.95 + 100 | 290 |
+| `{ "1st" => 2, "2nd" => 3}` | 2 * ( 200 + 200 ) * 0.95 + 100 | 480 |
 
-以此類推，讓我們來運用 Red-Green-Refractor 循環來完成上述測試案例和程式功能，過程中請謹記以下三個準則:
+以此類推，讓我們來運用 Red-Green-Refractor 循環來完成上述測試案例和程式功能，過程中請謹記以下三個準則：
 - 請先寫好測試案例，才開始實作程式功能
 - 每次只新增一個測試情境，不用一次新增多個測試情境
 - 每次實作功能時，只需要剛剛好通過測試即可，不多也不少
 
-### 撰寫「不打折」的測試案例與程式
+### 撰寫「不打折」情境的測試
 
-請為本題目創建一個資料夾 **rspec_tutorial_2**，並在裡面新增兩個資料夾和三個檔案：
+#### 準備檔案(要加 Gemfile)
+
+請為本題目創建一個專用的資料夾目錄，並在裡面新增兩個資料夾和三個檔案：
 - **.rspec**
 - **lib/cart.rb**
 - **spec/cart_spec.rb**
 
-接著在 **.rspec** 裡加入 `--format documentation` 和 `--color` 設定測試產出格式。
+我們會宣告一個 Cart class 來管理買書與計價的方法，你可以把這個類別當成一個擴充模組看待，所以習慣上會用一個叫名 **lib** 的資料夾來管理這些模組，也就是「函式庫」（library）。至於測試檔就放在 **spec** 的資料夾裡，意思是「規格」。
+
+先設定 **.rspec** 的內容：
+```
+--format documentation
+--color
+```
+
+然後先把主程式和測試檔連結起來，請你打開 **cart_spec.rb**，將要測試的程式拉入其中，並使用 `describe` 規劃出一個程式碼區塊：
+
+```Ruby
+require_relative 'cart.rb'
+
+describe Cart do
+
+end
+```
+_Path: spec/cart_spec.rb_
 
 #### 撰寫測試案例
 
 現在我們要來撰寫第一個情境，即沒有打折扣的測試案例。
+我們會宣告一個 `Cart` 類別來撰寫功能，在寫測試的時候，你也會需要定義會用到的 `Cart` 方法，也就是 `Cart` 公開的 API 介面。在這裡，我們會定義了兩個方法：
+- `add` 用於取得書籍的資料
+- `calculate` 計算出書的總價
 
-請打開 **cart_spec.rb**，將要測試的程式拉入其中：
+讓我們使用 `it`、`expect` 和 `to eq` 來呈現之前定義好的測試案例：
 
 ```Ruby
-require_relative 'cart.rb'
-```
-_Path: spec/cart_spec.rb_
-
-接著，描述我們要測試的程式：
-```Ruby
-require_relative 'cart.rb'
-
 describe Cart do
 
-end
-```
-_Path: spec/cart_spec.rb_
-
-我們會使用 `Cart`（購物車）物件撰寫這個功能，其中 `cart.add` 方法會用於取得書籍的資料，然後用 `cart.calculate` 方法計算出書的總價。
-
-由於我們使用物件來計算，因此要先用 RSpec 的  `before` 語法，在每個 it 測試前宣告一個 `cart` 物件，用來取用其方法：
-
-```Ruby
-require_relative 'cart.rb'
-
-describe Cart do
-
-  before :each do
+  it "第一集買 1 本" do
     @cart = Cart.new
+    @cart.add({ "1st": 1, "2nd": 0, "3rd": 0, "4th": 0, "5th": 0 })
+    expect(@cart.calculate).to eq(100)
   end
 
-end
-```
-_Path: spec/cart_spec.rb_
-
-接著，使用 `context` 語法描述情境，在該情境內使用 `it`、`expect` 和 `to eq` 語法撰寫兩個測試案例：
-
-```Ruby
-describe Cart do
-
-  before :each do
+  it "第一集買 3 本" do
     @cart = Cart.new
-  end
-
-  context "第一種情境：不打折" do
-
-    it "第一集買 1 本" do
-      @cart.add({ "1st": 1, "2nd": 0, "3rd": 0, "4th": 0, "5th": 0 })
-      expect(@cart.calculate).to eq(100)
-    end
-
-    it "第一集買 3 本" do
-      @cart.add({ "1st": 3, "2nd": 0, "3rd": 0, "4th": 0, "5th": 0 })
-      expect(@cart.calculate).to eq(300)
-    end
-
+    @cart.add({ "1st": 3, "2nd": 0, "3rd": 0, "4th": 0, "5th": 0 })
+    expect(@cart.calculate).to eq(300)
   end
 
 end
 ```
 _Path: spec/cart_spec.rb_
+
+比較需要注意的是，你需要使用物件導向的形式，先宣告出 `Cart` 物件實例，然後呼叫該實例的方法。
+此時因為你還沒有撰寫任何程式，如果在終端機執行 `rspec spec/cart_spec.rb`，結果會是一片紅燈。
 
 #### 撰寫計算程式
 
-請打開 **cart.rb**，創建一個 `Cart` class，並為這個 class 定義 `PRICE` 、 `add` 和 `calculate`：
-- `PRICE` 常數：代表每本書的單價
-- `add` 方法：帶入資料，經處理後存入 `@ordered_items`
-- `calculate` 方法：會回傳一個書籍的總價
+請打開 **lib/cart.rb**，創建一個 `Cart` class，先設定一些已知的方法與資料：
 
-請完成以上程式碼的撰寫，內容應如下所示：
 ```Ruby
 class Cart
 
@@ -188,6 +171,10 @@ end
 ```
 _Path: lib/cart.rb_
 
+- `PRICE` ：代表每本書的單價，因為這個數字不會改變，所以設成常數
+- `add` 方法：帶入資料，經處理後存入 `@ordered_items`，在這裡會直接使用 `map` 方法將 Hash 格式的資料轉成 Array，變成一個類似 `[1, 0, 0, 0, 0]` 的結構。
+- `calculate` 方法：根據 `@ordered_items` 計算價格，會回傳總價
+
 
 #### 進行測試
 
@@ -196,6 +183,65 @@ _Path: lib/cart.rb_
 ![1](images/0105-1.png)
 
 由於不打折的功能較為簡單，我們一次通過了兩個測試案例，讓我們繼續撰寫下一個情境的測試案例。
+
+#### 重構測試程式
+
+這時候我們可以停下來整理一下測試程式，首先，我們可以將重複用的到變數取出來，用 `before` 宣告一個區塊來統一管理：
+
+```diff  
+  describe Cart do
+
++   before :each do
++     @cart = Cart.new
++   end
+
+    it "第一集買 1 本" do
+-     @cart = Cart.new
+      @cart.add({ "1st": 1, "2nd": 0, "3rd": 0, "4th": 0, "5th": 0 })
+      expect(@cart.calculate).to eq(100)
+    end
+
+    it "第一集買 3 本" do
+-    @cart = Cart.new
+      @cart.add({ "1st": 3, "2nd": 0, "3rd": 0, "4th": 0, "5th": 0 })
+      expect(@cart.calculate).to eq(300)
+    end
+
+  end
+```
+_Path: spec/cart_spec.rb_
+
+考慮到接下來還要處理好幾個情境，我們也可以使用 `context` 語法來組織不同情境，`context` 的功能和 `describe` 一樣，不會影響到測試的執行，但會影響到輸出格式：
+
+```diff
+  describe Cart do
+
+    before :each do
+      @cart = Cart.new
+    end
+
++   context "第一種情境：不打折" do
+
+      it "第一集買 1 本" do
+        @cart.add({ "1st": 1, "2nd": 0, "3rd": 0, "4th": 0, "5th": 0 })
+        expect(@cart.calculate).to eq(100)
+      end
+
+      it "第一集買 3 本" do
+        @cart.add({ "1st": 3, "2nd": 0, "3rd": 0, "4th": 0, "5th": 0 })
+        expect(@cart.calculate).to eq(300)
+      end
+
++    end
+
+  end
+```
+_Path: spec/cart_spec.rb_
+
+請執行 `rspec spec/art_spec.rb` 指令測試你的程式碼，你會看見輸出結果多了一個階層：
+
+![1](images/0105-1.png)
+
 
 ### 撰寫「打 5% 折扣」的測試案例與程式
 
