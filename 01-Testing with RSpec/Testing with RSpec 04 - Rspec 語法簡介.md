@@ -129,11 +129,6 @@ expect(actual).not_to eq(wrong_result)
 
 使用 `before` 和 `after` 可以在每段 `it` 或 `describe` 執行前後進行程式碼的設定，如：宣告物件、加入物件新的資料。
 
-- `before(:each)`：每段 `it` 前執行
-- `before(:all)`：整段 `describe` 前只執行一次
-- `after(:each)`：每段 `it` 後執行
-- `after(:all)`：整段 `describe` 後只執行一次
-
 以下提供一範例，在每個 `it` 開始前使用 `before` 宣告好 `user` 和 `transaction`，在 `it` 內只設定 `total` 屬性：
 
 ```Ruby
@@ -141,7 +136,7 @@ describe Transaction do
   describe "#price" do
     context "If user is member" do
 
-      before(:each) do
+      before do
         @user = User.new( :is_member => true )
         @transaction = Transaction.new( :user => @user )
       end
@@ -217,7 +212,7 @@ require_relative "user.rb"
 describe "calculate age" do
     context "age below or equal to 18" do
 
-      before(:each) do
+      before do
         @user = User.new()
       end
 
