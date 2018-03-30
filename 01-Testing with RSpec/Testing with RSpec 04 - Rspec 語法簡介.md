@@ -3,7 +3,16 @@
 
 <hr style="border-top: 2px solid #eee">
 
-你已經快速體驗了 RSpec 的妙用，也透練習熟悉了 RSpec 的基本語法，本單元會介紹更多的 RSpec 指令和語法。
+你已經快速體驗了 RSpec 的妙用，也透練習熟悉了 RSpec 的基本語法，本單元會對 RSpec 進行更詳盡的說明與補充。
+
+### RSpec
+
+[RSpec](https://github.com/rspec/rspec) 是 2010 年推出的 Rails 測試框架，以清楚、語義化的撰寫方式和好用的 API 活躍於 Rails 社群，RSpec 框架有四個主要的函式庫：
+
+- rspec-core：提供 Rspec CLI 指令，透過指令產出具彈性且可以客製化的測試報告，並提供對應 API 來管理測試案例
+- rspec-expectations：提供方便閱讀的 API 來檢測實際結果與預期結果
+- rspec-mocks：提供多種 mock 工具讓你方便模擬各種物件，從而輕鬆控制各種測試環境的變數
+- rspec-rails：提供讓上述函式庫整合進 Ruby on Rails 框架的函式庫
 
 <br>
 
@@ -49,7 +58,7 @@
       <span class='terminal-path'>[~] </span><span class='terminal-command'>$ rspec  --help</span>
       </div>
   </div>
-</div> 
+</div>
 
 <br>
 
@@ -172,33 +181,58 @@
 
 <br>
 
-若想了解更多 Matcher，請參考：[https://relishapp.com/rspec/rspec-expectations/docs/built-in-matchers](https://relishapp.com/rspec/rspec-expectations/docs/built-in-matchers)
-
-<br>
-
 #### 測試的前置與後置作業：before、after
 
-使用 `before` 和 `after` 可以在每段 `it` 或 `describe` 執行前後進行程式碼的設定，如：宣告物件、加入物件新的資料。
+使用 `before` 和 `after` 可以在每段 `it` 或 `describe` 執行前後進行資料的設定（setup）與清除（teardown），如：宣告物件、刪除測試用的資料庫資料。
 
-以下提供一範例，在每個 `it` 開始前使用 `before` 宣告好 `user` 和 `transaction`，在 `it` 內只設定 `total` 屬性：
+`before` 常用於初始化設定，以下是一個使用者購買商品的例子，若這位使用者是 VIP 會員，就可享有 5% 的折扣。
+
+我們可以在每個 `it` 開始前使用 `before` 宣告好 `user` 和 `transaction`，在 `it` 內只需要設定 `total` 屬性：
+
+<pre style="background:#f9f9f9;color:#080808">describe <span style="color: #aa0000">Transaction</span> <span style="color: #0000aa">do</span>
+  describe <span style="color: #aa5500">&quot;#price&quot;</span> <span style="color: #0000aa">do</span><span style="color: #aaaaaa; font-style: italic">  # 在名稱前機上「#」表示是物件的方法</span>
+    context <span style="color: #aa5500">&quot;If user is VIP&quot;</span> <span style="color: #0000aa">do</span>
+
+      before <span style="color: #0000aa">do</span>
+        <span style="color: #aa0000">@user</span> = <span style="color: #aa0000">User</span>.new( <span style="color: #0000aa">:is_VIP</span> =&gt; <span style="color: #0000aa">true</span> ) <span style="color: #aaaaaa; font-style: italic"># 宣告一個新的 VIP user</span>
+        <span style="color: #aa0000">@transaction</span> = <span style="color: #aa0000">Transaction</span>.new( <span style="color: #0000aa">:user</span> =&gt; <span style="color: #aa0000">@user</span> ) <span style="color: #aaaaaa; font-style: italic"># user 買了些東西</span>
+      <span style="color: #0000aa">end</span>
+
+      it <span style="color: #aa5500">&quot;Discount 5% if total &gt; 1000&quot;</span> <span style="color: #0000aa">do</span>      <span style="color: #aaaaaa; font-style: italic"># 買超過 1000 元的商品時會有 5% 折扣</span>
+        <span style="color: #aa0000">@transaction</span>.total = <span style="color: #009999">2000</span>              <span style="color: #aaaaaa; font-style: italic"># 這個 user 買了 2000 元的商品</span>
+        expect(<span style="color: #aa0000">@transaction</span>.price).to eq(<span style="color: #009999">1900</span>)  <span style="color: #aaaaaa; font-style: italic"># 打 5% 折扣的結果是 1900</span>
+      <span style="color: #0000aa">end</span>
+
+    <span style="color: #0000aa">end</span>
+  <span style="color: #0000aa">end</span>
+<span style="color: #0000aa">end</span>
+</pre>
+
+`after` 則常用於清除在測試時新增的資料，以下例子與之前類似，我們將一般類別改寫成 `ActiveRecord` 的版本，所以資料會存入資料庫內，因此，我們需要在測試結束後把資料刪掉。
+
+在每個 `it` 結束後使用 `after` 清楚掉在測試裡新增的資料庫資料：
 
 <pre style="background:#f9f9f9;color:#080808">describe <span style="color: #aa0000">Transaction</span> <span style="color: #0000aa">do</span>
   describe <span style="color: #aa5500">&quot;#price&quot;</span> <span style="color: #0000aa">do</span>
-    context <span style="color: #aa5500">&quot;If user is member&quot;</span> <span style="color: #0000aa">do</span>
+    context <span style="color: #aa5500">&quot;If user is VIP&quot;</span> <span style="color: #0000aa">do</span>
 
       before <span style="color: #0000aa">do</span>
-        <span style="color: #aa0000">@user</span> = <span style="color: #aa0000">User</span>.new( <span style="color: #0000aa">:is_member</span> =&gt; <span style="color: #0000aa">true</span> )
-        <span style="color: #aa0000">@transaction</span> = <span style="color: #aa0000">Transaction</span>.new( <span style="color: #0000aa">:user</span> =&gt; <span style="color: #aa0000">@user</span> )
+        <span style="color: #aa0000">@user</span> = <span style="color: #aa0000">User</span>.create!( <span style="color: #0000aa">:is_VIP</span> =&gt; <span style="color: #0000aa">true</span> )    <span style="color: #aaaaaa; font-style: italic"># 在資料庫新增一個 VIP user</span>
+        <span style="color: #aa0000">@transaction</span> = <span style="color: #aa0000">Transaction</span>.create( <span style="color: #0000aa">:user_id</span> =&gt; <span style="color: #aa0000">@user</span>.id ) <span style="color: #aaaaaa; font-style: italic"># user 買了些東西</span>
+      <span style="color: #0000aa">end</span>
+
+      after <span style="color: #0000aa">do</span> <span style="color: #aaaaaa; font-style: italic"># 測試結束後，刪除資料庫的測試資料：user &amp; transaction</span>
+         <span style="color: #aa0000">@user</span>.destroy         
+         <span style="color: #aa0000">@transaction</span>.destroy
       <span style="color: #0000aa">end</span>
 
       it <span style="color: #aa5500">&quot;Discount 5% if total &gt; 1000&quot;</span> <span style="color: #0000aa">do</span>
-        <span style="color: #aa0000">@transaction</span>.total = <span style="color: #009999">2000</span>
-        expect(transaction.price).to eq(<span style="color: #009999">1900</span>)
+        <span style="color: #aa0000">@transaction</span>.total = <span style="color: #009999">2000</span>  <span style="color: #aaaaaa; font-style: italic"># user 買了 2000 元的東西</span>
+        <span style="color: #aa0000">@transaction</span>.save          <span style="color: #aaaaaa; font-style: italic"># transaction 資料存入資料庫</span>
+        expect(<span style="color: #aa0000">@transaction</span>.price).to eq(<span style="color: #009999">1900</span>)
       <span style="color: #0000aa">end</span>
 
-      <span style="color: #aaaaaa; font-style: italic"># 其他測試案例</span>
     <span style="color: #0000aa">end</span>
-    <span style="color: #aaaaaa; font-style: italic"># 其他測試情境</span>
   <span style="color: #0000aa">end</span>
 <span style="color: #0000aa">end</span>
 </pre>
@@ -242,6 +276,13 @@ describe <span style="color: #aa5500">&quot;將整數反轉過來&quot;</span> <
 
 <br>
 
-除了更熟悉已知的 RSpec 語法，我們也認識了新的語法，下個單元，讓我們使用新語法進行練習吧！
+### 更多 RSpec 語法
+
+在使用 Google 搜尋時，你會常常會被導引到 [Relish](https://relishapp.com/rspec/rspec-expectations/v/3-7/docs/built-in-matchers) ，這也是一個常用來查詢 RSpec 語法的網站：
+
+<div style="width:100%"> <img style="max-width:900px;width:100%;" src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/2451/_____2018-03-30_18.57.23.png"></div>
+
+隨著課程的進行，我們會繼續介紹更多 RSpec 的應用，以及如何整合 Rails 框架進行測試。
+
 
 <QUIZ>330</QUIZ><QUIZ>331</QUIZ>

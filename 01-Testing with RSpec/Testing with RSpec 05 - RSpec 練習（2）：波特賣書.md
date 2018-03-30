@@ -124,7 +124,7 @@ Key 代表的是哪一集的哈利波特，如 `1st` 是第一集，Value 代表
 - **.rspec**
 - **lib/cart.rb**
 - **spec/cart_spec.rb**
-- **Gemfile** 和 **Gemfile.lock** 
+- **Gemfile** 和 **Gemfile.lock**
 
 我們會宣告一個 Cart class 來管理買書與計價的方法，你可以把這個類別當成一個擴充模組看待，所以習慣上會用一個叫名 **lib** 的資料夾來管理這些模組，也就是「函式庫」（library）。至於測試檔就放在 **spec** 的資料夾裡，意思是「規格」。
 
@@ -308,6 +308,12 @@ describe <span style="color: #aa0000">Cart</span> <span style="color: #0000aa">d
 
 <div style="width:100%"> <img style="max-width:700px;width:100%;" src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/2446/_____2018-03-28___10.03.19.png"></div>
 
+
+<div style="background: #fbec9c; padding: 15px; border-radius: 10px">
+  你可以在<a href="https://github.com/ALPHACamp/testing-demo/commit/3b4ea38408a055202357ec3f35d4a5acfa399502?diff=split" target="_blank">這裡</a>看見第一次重構的程式碼差異
+</div>
+
+
 <br>
 
 ### 「打 5% 折扣」測試與功能實作
@@ -398,7 +404,10 @@ describe <span style="color: #aa0000">Cart</span> <span style="color: #0000aa">d
 
 我們在第二個情境裡的第一個測試案例也通過了，並且沒有破壞到第一組情境，然而，情境二裡的另外三個測試案例還沒沒有通過。
 
-<br>
+
+<div style="background: #fbec9c; padding: 15px; border-radius: 10px">
+  你可以在<a href="https://github.com/ALPHACamp/testing-demo/commit/56c72b5e6df7226c3ffa62f38ad1487fc54f5739?diff=split" target="_blank">這裡</a>看見「只買一組書，要打折」的程式碼差異
+</div>
 
 #### 案例：有多組書籍，都要打折
 
@@ -445,9 +454,14 @@ describe <span style="color: #aa0000">Cart</span> <span style="color: #0000aa">d
 
 <div style="width:100%"> <img style="max-width:700px;width:100%;" src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/2443/0105-4.png"></div>
 
-<br>
+
+<div style="background: #fbec9c; padding: 15px; border-radius: 10px">
+  你可以在<a href="https://github.com/ALPHACamp/testing-demo/commit/0130e576778524b6dccf67b7ba0f5f8f09064a78?diff=split" target="_blank">這裡</a>看見「有多組書籍，都要打折」的程式碼差異
+</div>
+
 
 <br>
+
 
 #### 案例：要打折和不打折的組合
 
@@ -488,7 +502,7 @@ describe <span style="color: #aa0000">Cart</span> <span style="color: #0000aa">d
 
 <span style="font-style: italic;color: #999;">Path: lib/cart.rb</span>
 
-<br> 
+<br>
 
 執行 `rspec spec/cart_spec.rb`：
 
@@ -497,6 +511,10 @@ describe <span style="color: #aa0000">Cart</span> <span style="color: #0000aa">d
 <br>
 
 恭喜你！雖然我們只是針對第三個測試案例撰寫程式功能，但也剛巧完成了第四個測試案例的功能，因此所有測試案例全數通過！
+
+<div style="background: #fbec9c; padding: 15px; border-radius: 10px">
+  你可以在<a href="https://github.com/ALPHACamp/testing-demo/commit/44319f4ebca66fc95de6ec9f815433f472c89afc?diff=split" target="_blank">這裡</a>看見「要打折和不打折的組合」的程式碼差異
+</div>
 
 <br>
 
@@ -539,6 +557,15 @@ describe <span style="color: #aa0000">Cart</span> <span style="color: #0000aa">d
 
 <br>
 
+以下是各階段程式碼的連結：
+|逐步完成程式功能的連結|
+|--|
+|<a href="https://github.com/ALPHACamp/testing-demo/commit/44319f4ebca66fc95de6ec9f815433f472c89afc?diff=split" target="_blank">要打折和不打折的組合</a>|
+|<a href="https://github.com/ALPHACamp/testing-demo/commit/0130e576778524b6dccf67b7ba0f5f8f09064a78?diff=split" target="_blank">有多組書籍，都要打折</a>|
+|<a href="https://github.com/ALPHACamp/testing-demo/commit/56c72b5e6df7226c3ffa62f38ad1487fc54f5739?diff=split" target="_blank">只買一組書，要打折</a>|
+|<a href="https://github.com/ALPHACamp/testing-demo/commit/3b4ea38408a055202357ec3f35d4a5acfa399502?diff=split" target="_blank">第一次重構</a>|
+
+
 ### 小結
 
 透過本次練習，你應該已經對自動化測試有較全面的認識，在實際開發時，除了流程與語法，你將不知不覺面對以下問題：
@@ -559,7 +586,7 @@ describe <span style="color: #aa0000">Cart</span> <span style="color: #0000aa">d
 <br>
 
 <div style="background: #fbec9c; padding: 15px; border-radius: 10px">
-  你可以在<a href="https://github.com/ALPHACamp/testing-demo/tree/master/potter-kata" target="_blank">這裡</a>看見與本單元相關的示範程式碼
+  你可以在<a href="https://github.com/ALPHACamp/testing-demo/tree/master/potter-kata" target="_blank">這裡</a>看見與本單元相關的完整示範程式碼
 </div>
 
 <br>

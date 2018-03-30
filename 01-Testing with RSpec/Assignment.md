@@ -23,15 +23,70 @@ Q3:
 - 請在 Description 裡描述你如何設計你的測試案例。
 
 Q4:
+這個題目會請你練習運用搜尋工具，判斷適合的 RSpec 語法。
+有一支程式名為 random_range，給 1 個數字，會從 0 到該數字（不包含）隨機挑選一個數字，做為回傳值。
 
-請使用 Red-Green-Refractor 循環完成 remove duplicates from sorted array 的程式與測試程式，以下是題目說明：
+以下是該程式的測試案例：
 
-給一個排序好的數字陣列，移除掉所有重複的數字，讓每個數字只出現一次，並回傳完成後的陣列長度。
+```Ruby
+require_relative "random_range.rb"
 
-例子：若輸入 [1,2,2,3,3,3,4,10]，回傳 5。
+describe "random range" do
+  it "100 應回傳介於 0 和 100 之間的數字" do
+    # answer
+  end
+end
+```
 
-在撰寫測試案例時，請記得在你的 it 內寫上你會輸入的資料。
+根據 `it` 內的測試案例說明，請問「# answer」應填上什麼？（單選題）
 
-- Cover 請放上執行完 rspec 指令後，全部測試案例通過的截圖。
-- 請在 GitHub 欄位裡輸入 GitHub 網址
-- 請在 Description 裡描述你如何設計你的測試案例。
+- expect(0..100).to cover(random_range(100))
+- expect(random_range(100)).to cover(100)
+- expect(random_range(100).to cover(89)
+- expect(0).to cover(random_range(100))
+
+答：1
+註記：程式碼回傳的結果必須包含在 0 到 100 的範圍內，因此 random_range(100) 必須寫在 cover 裡，表示被包含，而 expect 則是帶入預期的範圍，因此答案是選項一。
+
+
+Q5：
+
+這個題目會請你練習運用搜尋工具，判斷適合的 RSpec 語法。
+`Person` 是一個類別，而 `Person` 的測試程式要確認 Person 的 `new` 方法可以正確執行，正常的宣告出物件和設置好其屬性。
+
+以下是 Person 的程式碼：
+
+```Ruby
+class Person
+  attr_accessor :name, :age, :role
+
+  def initialize(name, age, role)
+    @name = name
+    @age = age
+    @role = role
+  end
+end
+```
+
+以下是 Person 的測試案例：
+
+```Ruby
+require_relative "Person.rb"
+
+describe "確認 Person 宣告成功" do
+  it "Person init" do
+    person = Person.new("Bernard",45,"admin")
+    # answer
+  end
+end
+```
+
+如果我們要確認 `person` 的屬性都有設置好，請問「# answer」應填上什麼？（單選題）
+
+- expect(person).to have_attributes(:name => "Big Ben", :age => 45, :role => "admin")
+- expect(person).to have_attributes("Bernard",45,"admin")
+- expect(person).to have_attribute(:name => "Bernard", :age => 45, :role => "admin")
+- expect(person).to have_attributes(:name => "Bernard", :age => 45, :role => "admin")
+
+答：4
+註記：要檢查物件裡是否有對應的屬性與內容，要用 have_attributes 帶入指定屬性名稱與對應的內容確認。

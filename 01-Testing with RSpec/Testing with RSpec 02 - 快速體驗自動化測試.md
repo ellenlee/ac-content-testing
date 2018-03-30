@@ -113,7 +113,7 @@ fizzbuzz(<span style="color: #009999">1</span>)   <span style="color: #aaaaaa; f
 
 ### 自動化測試
 
-接下來，我們會使用一個叫 RSpec 的 Ruby 套件來進行測試，請你在本單元內先跟著執行，有了一次實作體驗後，在下個單元起，我們會詳細解釋 RSpec 的功能。
+接下來，我們將使用一個叫 RSpec 的 Ruby 套件來進行自動化測試，RSpec 以清楚、語義化的撰寫方式和好用的 API 活躍於 Rails 社群。請你在本單元內先跟著執行，有了一次實作體驗後，下個單元起，我們會詳細解釋 RSpec 的功能。
 
 <br>
 
@@ -132,7 +132,18 @@ fizzbuzz(<span style="color: #009999">1</span>)   <span style="color: #aaaaaa; f
 
 <br>
 
-然後在 **fizzbuzz.rb** 同個資料夾內，新增一個 `.rspec` 檔，加入以下兩行設定：
+然後在 **fizzbuzz.rb** 同個資料夾內，我們要來創建一個 **.rspec** 檔（隱藏檔），你可以在 sublime／atom 裡按右鍵點選 new file 新增檔案，
+或使用指令創建檔案：
+<div class='terminal-block'>
+  <div class='terminal-block-head'>Terminal</div>
+  <div class='terminal-block-body'>
+    <div class='terminal-code-line'>
+      <span class='terminal-path'>[~] </span><span class='terminal-command'> $ touch .rspec</span>
+    </div>
+  </div>
+</div>
+
+請在 **.rspec** 檔裡加入以下兩行設定：
 
 <pre style="background:#f9f9f9;color:#080808">--format documentation
 --color
@@ -140,7 +151,7 @@ fizzbuzz(<span style="color: #009999">1</span>)   <span style="color: #aaaaaa; f
 
 <br>
 
-接着再新增一個檔案 `fizzbuzz_spec.rb`，內容如下：
+接着再新增一個檔案 **fizzbuzz_spec.rb**，內容如下：
 
 <pre style="background:#f9f9f9;color:#080808">require_relative <span style="color: #aa5500">&#39;fizzbuzz.rb&#39;</span>
 
