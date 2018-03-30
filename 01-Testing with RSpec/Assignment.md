@@ -23,10 +23,8 @@ Q3:
 - 請在 Description 裡描述你如何設計你的測試案例。
 
 Q4:
-這個題目會請你使用 Google 搜尋相關的 RSpec 語法，清楚閱讀了該語法的使用方式後，請根據以下題目與測試案例選出最適合的答案。
-
-題目說明：
-有一支程式名 random_range，給 1 個數字，這個程式會從 0 到該數字（不包含）隨機挑選一個數字。
+這個題目會請你練習運用搜尋工具，判斷適合的 RSpec 語法。
+有一支程式名為 random_range，給 1 個數字，會從 0 到該數字（不包含）隨機挑選一個數字，做為回傳值。
 
 以下是該程式的測試案例：
 
@@ -53,10 +51,8 @@ end
 
 Q5：
 
-這個題目會請你使用 Google 搜尋相關的 RSpec 語法，清楚閱讀了該語法的使用方式後，請根據以下題目與測試案例選出最適合的答案。
-
-題目說明：
-`Person` 是一個類別，而 `Person` 的測試程式要確認 Person 的 new／init 方法可以正確執行，正常的宣告出物件和設置好其屬性。
+這個題目會請你練習運用搜尋工具，判斷適合的 RSpec 語法。
+`Person` 是一個類別，而 `Person` 的測試程式要確認 Person 的 `new` 方法可以正確執行，正常的宣告出物件和設置好其屬性。
 
 以下是 Person 的程式碼：
 
@@ -89,7 +85,7 @@ end
 
 - expect(person).to have_attributes(:name => "Big Ben", :age => 45, :role => "admin")
 - expect(person).to have_attributes("Bernard",45,"admin")
-- expect(person).to have_attribute(name: "Bernard", age: 45, role: "admin")
+- expect(person).to have_attribute(:name => "Bernard", :age => 45, :role => "admin")
 - expect(person).to have_attributes(:name => "Bernard", :age => 45, :role => "admin")
 
 答：4

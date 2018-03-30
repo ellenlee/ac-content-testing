@@ -278,14 +278,11 @@ describe <span style="color: #aa5500">&quot;將整數反轉過來&quot;</span> <
 
 ### 更多 RSpec 語法
 
-你可以透過 GitHub 上的 [RSpec Gem ](https://github.com/rspec/rspec-expectations) 了解到更多的 Matcher 的寫法，幫助你撰寫出更多的測試案例。
-
-如果你用 Google 搜尋 RSpec 關鍵字，通常會導引到 [Relish](https://relishapp.com/rspec/rspec-expectations/v/3-7/docs/built-in-matchers) ，這也是一個常用來查詢 RSpec 語法的網站：
+在使用 Google 搜尋時，你會常常會被導引到 [Relish](https://relishapp.com/rspec/rspec-expectations/v/3-7/docs/built-in-matchers) ，這也是一個常用來查詢 RSpec 語法的網站：
 
 <div style="width:100%"> <img style="max-width:900px;width:100%;" src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/2451/_____2018-03-30_18.57.23.png"></div>
 
-<br>
+隨著課程的進行，我們會繼續介紹更多 RSpec 的應用，以及如何整合 Rails 框架進行測試。
 
-請你先使用這些基本的 RSpec 語法來撰寫測試案例，之後課程會講解搭配 Rails 框架後的 RSpec 應用。
 
 <QUIZ>330</QUIZ><QUIZ>331</QUIZ>
