@@ -1,5 +1,5 @@
 > **學習成果與目標**
->・能夠使用基本的 RSpec 語法撰寫測試案例 能夠使用 Red-Green-Refractor 循環完成程式
+>・能夠使用基本的 RSpec 語法撰寫測試案例
 
 <hr style="border-top: 2px solid #eee">
 
