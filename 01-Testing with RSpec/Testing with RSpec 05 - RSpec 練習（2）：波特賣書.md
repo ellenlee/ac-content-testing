@@ -124,7 +124,7 @@ Key 代表的是哪一集的哈利波特，如 `1st` 是第一集，Value 代表
 - **.rspec**
 - **lib/cart.rb**
 - **spec/cart_spec.rb**
-- **Gemfile** 和 **Gemfile.lock** 
+- **Gemfile** 和 **Gemfile.lock**
 
 我們會宣告一個 Cart class 來管理買書與計價的方法，你可以把這個類別當成一個擴充模組看待，所以習慣上會用一個叫名 **lib** 的資料夾來管理這些模組，也就是「函式庫」（library）。至於測試檔就放在 **spec** 的資料夾裡，意思是「規格」。
 
@@ -488,7 +488,7 @@ describe <span style="color: #aa0000">Cart</span> <span style="color: #0000aa">d
 
 <span style="font-style: italic;color: #999;">Path: lib/cart.rb</span>
 
-<br> 
+<br>
 
 執行 `rspec spec/cart_spec.rb`：
 

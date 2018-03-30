@@ -178,7 +178,7 @@
     <div class='terminal-block-head'>Terminal</div>
     <div class='terminal-block-body'>
         <div class='terminal-code-line'>
-            <span class='terminal-path'>[~]</span><span class='terminal-command'> $ rspec reverse_integer_spec.rb</span> 
+            <span class='terminal-path'>[~]</span><span class='terminal-command'> $ rspec reverse_integer_spec.rb</span>
       </div>
   </div>
 </div>

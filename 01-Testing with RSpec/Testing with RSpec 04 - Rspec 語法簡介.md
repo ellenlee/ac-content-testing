@@ -3,7 +3,16 @@
 
 <hr style="border-top: 2px solid #eee">
 
-你已經快速體驗了 RSpec 的妙用，也透練習熟悉了 RSpec 的基本語法，本單元會介紹更多的 RSpec 指令和語法。
+你已經快速體驗了 RSpec 的妙用，也透練習熟悉了 RSpec 的基本語法，本單元會對 RSpec 進行更詳盡的說明與補充。
+
+### RSpec
+
+[RSpec](https://github.com/rspec/rspec) 是 2010 年推出的 Rails 測試框架，以清楚、語義化的撰寫方式和好用的 API 活躍於 Rails 社群，RSpec 框架有四個主要的函式庫：
+
+- rspec-core：提供 Rspec CLI 指令，透過指令產出具彈性且可以客製化的測試報告，並提供對應 API 來管理測試案例
+- rspec-expectations：提供方便閱讀的 API 來檢測實際結果與預期結果
+- rspec-mocks：提供多種 mock 工具讓你方便模擬各種物件，從而輕鬆控制各種測試環境的變數
+- rspec-rails：提供讓上述函式庫整合進 Ruby on Rails 框架的函式庫
 
 <br>
 
@@ -49,7 +58,7 @@
       <span class='terminal-path'>[~] </span><span class='terminal-command'>$ rspec  --help</span>
       </div>
   </div>
-</div> 
+</div>
 
 <br>
 
