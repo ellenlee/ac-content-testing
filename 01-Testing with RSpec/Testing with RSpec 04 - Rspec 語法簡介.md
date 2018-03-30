@@ -181,10 +181,6 @@
 
 <br>
 
-若想了解更多 Matcher，請參考：[https://relishapp.com/rspec/rspec-expectations/docs/built-in-matchers](https://relishapp.com/rspec/rspec-expectations/docs/built-in-matchers)
-
-<br>
-
 #### 測試的前置與後置作業：before、after
 
 使用 `before` 和 `after` 可以在每段 `it` 或 `describe` 執行前後進行程式碼的設定，如：宣告物件、加入物件新的資料。
@@ -251,6 +247,24 @@ describe <span style="color: #aa5500">&quot;將整數反轉過來&quot;</span> <
 
 <br>
 
-除了更熟悉已知的 RSpec 語法，我們也認識了新的語法，下個單元，讓我們使用新語法進行練習吧！
+### 使用 Relish 查詢 RSpec 語法
+
+Relish 是一個提供公開專案存放 API 文件的網頁應用服務，開發者可以使用 Relishapp 搜尋、發佈和分享各種 API 文件。
+
+而 RSpec 在 Relish 上也存有 API 文件，讓我們來進入 https://relishapp.com/rspec 查詢更多 RSpec 語法與指令。
+
+你會看到 RSpec 頁面左邊有四個選項，分別對應了四個主要的函式庫：
+
+<div style="width:100%"> <img style="max-width:900px;width:100%;" src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/2449/0104-2.png"></div>
+
+請點選左邊的「RSpec expectation 3.7」並選擇你的 RSpec 版本，如果你是第一次安裝，應為 3.7 版本；你也可以透過 `gem list rspec` 指令確認版本。
+
+請點選左邊的「Built-in Matcher」進入該頁面：
+
+<div style="width:100%"> <img style="max-width:900px;width:100%;" src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/2450/0104-3.png"></div>
+
+你可以在這個頁面裡找到所有的 Matcher，並根據測試情境使用對應的 Matcher 來達成測試的目的。
+
+除了更熟悉已知的 RSpec 語法，你也認識了新的語法，下個單元，讓我們來使用新語法進行練習吧！
 
 <QUIZ>330</QUIZ><QUIZ>331</QUIZ>

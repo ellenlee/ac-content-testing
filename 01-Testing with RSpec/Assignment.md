@@ -23,15 +23,54 @@ Q3:
 - 請在 Description 裡描述你如何設計你的測試案例。
 
 Q4:
+有一支程式名 random_range，給 1 個數字，這個程式會從 0 到該數字（不包含）隨機挑選一個數字。
 
-請使用 Red-Green-Refractor 循環完成 remove duplicates from sorted array 的程式與測試程式，以下是題目說明：
+以下是這支程式的測試案例，請問 expect 和 cover 裡應填上什麼？
 
-給一個排序好的數字陣列，移除掉所有重複的數字，讓每個數字只出現一次，並回傳完成後的陣列長度。
+```Ruby
+require_relative "random_range.rb"
 
-例子：若輸入 [1,2,2,3,3,3,4,10]，回傳 5。
+describe "random range" do
+  it "100 應回傳介於 0 和 100 的數字" do
+    expect( ____ ).to cover( ____ )
+  end
+end
+```
 
-在撰寫測試案例時，請記得在你的 it 內寫上你會輸入的資料。
 
-- Cover 請放上執行完 rspec 指令後，全部測試案例通過的截圖。
-- 請在 GitHub 欄位裡輸入 GitHub 網址
-- 請在 Description 裡描述你如何設計你的測試案例。
+提示：你可以透過 Relish 查詢以上 RSpec 語法的格式與範例
+
+- 請在欄位裡貼上完整的測試案例的完整程式碼。
+
+Q5：
+
+以下是 Person 類別的程式碼：
+
+```Ruby
+class Person
+  def init(name, age, role)
+    @name = name
+    @age = age
+    @role = role
+  end
+end
+```
+
+以下是 Person 類別的測試案例：
+
+```Ruby
+require_relative "Person.rb"
+
+describe "確認 Person 宣告成功" do
+  it "Person " do
+    person = Person.new("Bernard",45,"admin")
+    expect(person). ______________
+  end
+end
+```
+
+請問底線的位置該填上什麼？
+
+提示：你可以透過 Relish 查詢以上 RSpec 語法的格式與範例。
+
+- 請在欄位裡貼上完整的測試案例的完整程式碼。
