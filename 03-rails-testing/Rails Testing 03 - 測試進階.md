@@ -16,14 +16,14 @@
 首先我們嘗試撰寫 email 登入的測試:
 
 ```
-# spec/controller/api_v1/auth.rb
+# spec/controller/api_v1/auth_spec.rb
 
 it "login via email and password" do
 	user = create(:user, email: '123@gmail.com', password: '123123')
-	post "/api/v1/login", email: user.email, password: '123123'
+	post "login", params: { email: user.email, password: '123123' }
 	
 	expect(response).to have_http_status(200)
-	expect(response.body).to eq({
+	expect(JSON.parse(response.body)).to eq({
 		message: 'ok',
 		auth_token: user.auth_token,
 	})
@@ -48,7 +48,7 @@ def login
     if success
       render json: {
         message: "ok",
-        auth_token: user.auth_token
+        auth_token: user.authentication_token
       }
     else
       render json: { message: "failed" }, status: 401
@@ -59,7 +59,7 @@ end
 重新執行一次測試，應該會出現 `1 example, 1 success`，到目前為止已經完成 email 登入功能。接著我們試著加上 Facebook 登入的功能，先撰寫測試的部分:
 
 ```
-# spec/controller/api_v1/auth.rb
+# spec/controller/api_v1/auth_spec.rb
 
 it "login via facebook access_token" do
 	user = create(:user, email: '123@gmail.com', password: '123123')
@@ -70,12 +70,12 @@ it "login via facebook access_token" do
 	allow(OmniAuth::AuthHash).to receive(:new).and_return(auth_hash)
 	allow(User).to receive(:from_omniauth).with(auth_hash).and_return(user)
 
-	post "/api/v1/login", access_token: fb_access_token
+	post "login", params: { access_token: fb_access_token }
 	
 	expect(response).to have_http_status(200)
 	expect(response.body).to eq({
 		message: 'ok',
-		auth_token: user.auth_token,
+		auth_token: user.authentication_token,
 	})
 end
 ```
@@ -93,7 +93,7 @@ def login
 		user = User.find_by_email(params[:email])
 		success = user && user.valid_password?(params[:password])
 --	end
-++	else if
+++	elsif params[:access_token]
 ++		fb_data = User.get_facebook_user_data(params[:access_token])
 ++		if fb_data
 ++			auth_hash = OmniAuth::AuthHash.new({
@@ -114,7 +114,7 @@ def login
 	if success
 		render json: {
 			message: "ok",
-			auth_token: user.auth_token
+			auth_token: user.authentication_token
 		}
 	else
 		render json: { message: "failed" }, status: 401
@@ -129,15 +129,16 @@ end
 登入完成之後，接下來是登入。登入的邏輯比較單純，我們只需要重新產生該使用者的 auth_token 就可以達到我們的目的。我們先從測試出發:
 
 ```
-# spec/controller/api_v1/auth.rb
+# spec/controller/api_v1/auth_spec.rb
 
 it "logout succesfully" do
 	user = create(:user, email: '123@gmail.com', password: '123123')
+	token = user.authentication_token
 	
-	post "/api/v1/logout", email: user.email, password: '123123'
+	post "logout", parmas: { auth_token: user.authentication_token }
 	
 	user.reload
-	expect(user.auth_token).not_to eq(user.auth_token)
+	expect(user.authentication_token).not_to eq(token)
 end
 ```
 
