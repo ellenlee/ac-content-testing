@@ -15,7 +15,7 @@
 - rspec-core: 提供豐富的 command line 指令，彈性且可以客製化的結果回報 API，並提供 API 來管理 code examples。
 - rspec-expectations: 提供方便閱讀的 API 來檢測預期結果和真正結果。
 - rspec-mocks: 提供多種 mock 的工具讓你方便假裝各種物件，讓輕鬆的控制各種測試環境變數。
-- rspec-rails: 提供一些讓上述的函式庫能夠順利整合 Ruby on Rails 這個 framework 的函式庫。 
+- rspec-rails: 提供一些讓上述的函式庫能夠順利整合 Ruby on Rails 這個 framework 的函式庫。
 
 透過在 Gemfile 裡面加上
 
@@ -45,7 +45,7 @@ bundle exec rspec
 
 順利的話會看到下面的畫面
 
-[圖一](Rails Testing 0101.png)
+![圖一](Rails Testing 0101.png)
 
 #### 安裝 factory_girl_rails
 
@@ -61,8 +61,11 @@ end
 
 接著在 `spec/spec_helper.rb` 裡面加上
 
-```
-config.include FactoryGirl::Syntax::Methods
+```ruby
+RSpec.configure do |config|
+  ...
+  config.include FactoryGirl::Syntax::Methods
+end
 ```
 
 安裝完成之後我們必須先針對目標 model 在新增相對應的設定檔，一般來說，假設我們要新增 `user` model 的假資料，我們會加在 `spec/factories/` 目錄下面建立 `model.rb` 檔案，內容如下:

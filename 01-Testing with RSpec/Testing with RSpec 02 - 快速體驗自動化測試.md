@@ -1,23 +1,37 @@
 ## 快速體驗自動化測試
-> 認識自動化測試的操作步驟
+> 理解自動化測試的運作方式
 
-你已經從上個單元了解到什麼是測試，現在先讓我們用一個簡單的題目來快速體驗一下「自動化測試」。
+在這個單元裡，我們將用一個簡單的題目來快速體驗何謂「自動化測試」。
 
-注意：本單元意在體驗自動化測試，請依照教案將程式碼依序貼上並執行對應指令，仔細觀察結果；我們會在之後的章節裡詳細說明 自動化測試的語法和使用方式。
+在使用本單元時，請依照教案將程式碼依序貼上並執行對應指令，仔細觀察結果；我們會在之後的章節裡詳細說明自動化測試的語法和使用方式。
 
 ### 題目說明：FizzBuzz
 
-FizzBuzz 程式是經典的面試考題之一，給一個整數：
-- 整數能被三整除，回傳 Fizz；如果數字是 3，就會回傳 Fizz
-- 整數能被五整除，回傳 Buzz；如果數字是 5，就會回傳 Buzz
-- 整數能被三和五同時整除，回傳 FizzBuzz；如果數字是 15，就會回傳 FizzBuzz
-- 若都不能整除，回傳該整數；若數字是 1，則回傳 1
+FizzBuzz 程式是經典的面試考題之一。你會撰寫一支程式，並將一個整數傳入該程式，程式會檢查該整數：
+- 若該整數能被三整除，回傳 Fizz；
+- 若該整數能被五整除，回傳 Buzz；
+- 若該整數能被三和五同時整除，回傳 FizzBuzz；
+- 若都不能整除，回傳該整數。
 
-### 撰寫 FizzBuzz 程式（第一版）
+根據上述規則，我們將用以下資料來檢查程式的有效性：
 
-自動化測試，就是用程式去測試程式，因此我們必須先寫好 FizzBuzz 的程式。
+| 傳入資料 | 預期結果   |
+|----------|------------|
+| 3        | "Fizz"     |
+| 5        | "Buzz"     |
+| 15       | "FizzBuzz" |
+| 1        | 1          |
 
-請創建一個檔案 **fizzbuzz.rb**，內容如下：
+### irb 手動測試
+
+在說明自動化測試之前，我們先使用傳統的手動測試方法，也就是寫好程式之後，進入 irb 來帶入對應的測試資料。
+
+#### 撰寫 FizzBuzz 程式（第一版）
+
+讓我們先簡單寫一個 FizzBuzz 的程式。
+
+請創建一個檔案 **fizzbuzz.rb**，內容如下，以下內容有一些故意遺漏的細節：
+
 ```ruby
 def fizzbuzz(int)
   if int % 3 == 0
@@ -33,30 +47,22 @@ def fizzbuzz(int)
   end
 end
 ```
-_Path: fizzbuzz.rb_
 
-完成了程式，我們通常會手動進行測試，最常見的就是用進入 irb 帶入對應的測試資料。
+在終端執行 `irb` 输入指令，載入檔案之後，用我們設定的資料來進行測試：
 
-#### 手動測試：irb
-
-在終端執行 `irb` 输入指令：
-
-```
+```ruby
 require_relative 'fizzbuzz.rb'
-fizzbuzz(3)   # => 应该得到 Fizz
-fizzbuzz(5)   # => 应该得到 Buzz
-fizzbuzz(15)  # => 应该得到 FizzBuzz
+fizzbuzz(3)   # => 回傳 Fizz
+fizzbuzz(5)   # => 回傳 Buzz
+fizzbuzz(15)  # => 預期回傳 FizzBuzz，實際回傳 Fizz
+fizzbuzz(1)   # => 預期回傳 1，實際沒有任何回傳結果
 ```
 
-irb 上的結果是否正確？
+你的 irb 上結果是如何呢？讓我們繼續修改程式⋯⋯
 
-整數 15 本該回傳 `FizzBuzz`，但結果是 `Fizz`；程式寫錯了，我們必須回去更動程式。
+#### 修改 FizzBuzz 程式（第二版）
 
-请輸入 `exit` 離開 `irb`。
-
-### 修改 FizzBuzz 程式（第二版）
-
-讓我們來修改 `fizzbuzz.rb`，改寫成：
+修改 **fizzbuzz.rb**，改寫成：
 
 ```ruby
 def fizzbuzz(int)
@@ -73,35 +79,38 @@ def fizzbuzz(int)
   end
 end
 ```
-_Path: fizzbuzz.rb_
 
 再次進入 `irb` 測試程式：
-```
+
+```ruby
 require_relative 'fizzbuzz.rb'
-fizzbuzz(3)   # => 应该得到 Fizz
-fizzbuzz(5)   # => 应该得到 Buzz
-fizzbuzz(15)  # => 应该得到 FizzBuzz 了
+fizzbuzz(3)   # => 回傳 Fizz
+fizzbuzz(5)   # => 回傳 Buzz
+fizzbuzz(15)  # => 回傳 FizzBuzz
+fizzbuzz(1)   # => 預期回傳 1，實際沒有任何回傳結果
 ```
 
-看起來這次的測試結果好像都對了，你可能還會想再輸入幾個數字試試看。
+還是漏掉了 `1` 的特例，或者，你可能還會想再輸入幾個數字試試看。
 
 這個往返檢查和修改程式的過程，相信大家一定都不陌生，自動化測試要達成的目的，就是把這個檢查過程給<span style="color:red">自動化</span>。
 
-### 使用 RSpec 進行自動化測試
 
-RSpec 是 Ruby 的軟體套件，是一種測試用的工具，目前非常多 Ruby on Rails 專案使都使用 RSpec 來進行測試。
+### 自動化測試
 
-請各位使用指令安裝 RSpec：
+接下來，我們會使用一個叫 RSpec 的 Ruby 套件來進行測試，請你在本單元內先跟著執行，有了一次實作體驗後，在下個單元起，我們會詳細解釋 RSpec 的功能。
+
+#### 安裝並設定 RSpec
+
+請回到終端機，使用指令安裝 RSpec：
+```bash
+[~] $ gem install rspec
 ```
-gem install rspec
-```
 
-請在 **fizzbuzz.rb** 同個資料夾內，新增一個 `.rspec` 檔，內容如下：
+然後在 **fizzbuzz.rb** 同個資料夾內，新增一個 `.rspec` 檔，加入以下兩行設定：
 ```
 --format documentation
 --color
 ```
-_Path: .rspec_
 
 接着再新增一個檔案 `fizzbuzz_spec.rb`，內容如下：
 
@@ -112,50 +121,55 @@ describe "FizzBuzz" do
 
   it "3 應該是 Fizz" do
     result = fizzbuzz(3)
-    expect(result).to eq('Fizz')    # 结果应该要是 Fizz
+    expect(result).to eq('Fizz')    # 傳入 3，預期結果為 Fizz
   end
 
   it "5 應該是 Buzz" do
     result = fizzbuzz(5)
-    expect(result).to eq('Buzz')     # 结果应该要是 Buzz
+    expect(result).to eq('Buzz')     # 傳入 5，預期結果為 Buzz
   end
 
   it "15 應該是 FizzBuzz" do
     result = fizzbuzz(15)
-    expect(result).to eq('FizzBuzz') # 结果应该要是 FizzBuzz
+    expect(result).to eq('FizzBuzz') # 傳入 15，預期結果為 FizzBuzz
   end
 
   it "1 應該是 1" do
     result = fizzbuzz(1)
-    expect(result).to eq(1)          # 结果应该要是 1
+    expect(result).to eq(1)          # 傳入 1，預期結果為 1
   end
 
 end
 ```
-_Path: fizzbuzz_spec.rb_
 
 在這個檔案裡，每個 `it` 語法包起來的就是一個測試案例（Test Case），我們會在裡面用 `expect` 方法去檢查結果是否如我們所預期。
 
 這裡除了測試 3、5、15 外，也多新增了 1 的測試案例，由於 1 不能被 3 或 5 整除，其結果應為 `1`。
 
-#### 通過與失敗：Green & Red
+#### 執行自動化測試
 
-至此我們共有三個檔案：**.rspec**、**fizzbuzz.rb**、**fizzbuzz_rspec.rb**。；請確認這三個檔案都在同一個資料夾裡。
+至此我們共有三個檔案：**.rspec**、**fizzbuzz.rb**、**fizzbuzz_rspec.rb**，請確認這三個檔案都在同一個資料夾裡，若不確定，可以參考[這裡](https://github.com/ALPHACamp/testing-demo/tree/master/fizzbuzz)。
 
 接著在該資料夾下，使用 RSpec 指令進行自動化測試：
 ```bash
-[~] $ rspec fizzbuzz_spec.rb
+[~/fizzbuzz] $ rspec fizzbuzz_spec.rb
 ```
+
+你會看見以下的測試結果：
 
 ![image](images/0102-1.png)
 
-執行完 RSpec 指令後，除了一般系統訊息會是白色外，還有兩種顏色分別代表了測試的成功與失敗：
-- 測試成功 - 綠色（Green）
-- 測試失敗 - 紅色（Red）
+開頭的清單逐項列出了我們寫在 `it` 裡的測試案例：
+- 3 應該是 Fizz (測試通過，亮綠燈)
+- 5 應該是 Buzz (測試通過，亮綠燈)
+- 15 應該是 FizzBuzz (測試通過，亮綠燈)
+- 1 應該是 1 (測試失敗，紅燈)
 
-紅色訊息表示該測試案例沒有通過，它指出我們的數字為 1 的結果不正確，預期是 1 但卻得到 nil。這很正常，因為我們剛撰寫的 fizzbuzz 程式並沒有考量到整數不能被 3 或 5 整除的情況。
+綠色代表測試通過，而紅色訊息表示該測試案例沒有通過。然後針對失敗的案例，RSpec 進一步提供解說，它指出我們的數字為 1 的結果不正確，預期是 1 但卻得到 nil。
 
-### 修改 FizzBuzz 程式（完成版）
+由於你就是程式的撰寫者，你應該知道，我們剛才撰寫的程式並沒有考量到整數不能被 3 或 5 整除的情況。
+
+#### 修改 FizzBuzz 程式（完成版）
 
 讓我們再次回去更動我們的程式，改寫成以下版本：
 ```ruby
@@ -175,7 +189,6 @@ def fizzbuzz(int)
   return int
 end
 ```
-_Path: fizzbuzz.rb_
 
 再執行一次 `rspec fizzbuzz_spec.rb`，結果應如下所示：
 
@@ -183,9 +196,9 @@ _Path: fizzbuzz.rb_
 
 當你看到終端上都是綠色時，表示四個測試案例都通過了，如果你對程式還有疑慮，是否考慮得不夠完善，你也可以增加更多的測試資料來檢查。
 
-## 重構 FizzBuzz 程式（最終版）
+### 重構 FizzBuzz 程式（最終版）
 
-最後，雖然程式是完成了，但程式碼本身不夠精簡，我們需要替 FizzBuzz 重構一下。
+最後，雖然程式完成了，但程式碼本身不夠精簡，我們需要替 FizzBuzz 重構一下。
 
 重構，即是在不影響程式功能的情況下讓程式碼變得「漂亮」，例如 FizzBuzz 程式可以修改成以下內容：
 
@@ -199,22 +212,19 @@ def fizzbuzz(int)
   return int
 end
 ```
-_Path: fizzbuzz.rb_
 
-那要怎麼確認改成這樣，結果還是正確呢？
-
-只要再執行一次 `rspec fizzbuzz_spec.rb` 指令檢查測試結果就行了！是不是很方便？！這就是自動化測試！
+那要怎麼確認在重構程式碼時，沒有破壞到原有的邏輯呢？只要再執行一次 `rspec fizzbuzz_spec.rb` 指令檢查測試結果就行了！
 
 ![image](images/0102-2.png)
 
-自動化測試，讓我們在寫完程式後可以非常快速地進行檢查時，不至於改壞了程式而不自知。
+是不是很方便？！這就是自動化測試！一旦寫好測試程式，很容易就可以檢查程式有沒有寫對，大大減少除錯的時間，在熟悉測試程式的撰寫方法以後，整體而言，寫測試的時間，會小於手動除錯的時間。
 
-你已經體驗過自動化測試的妙用，下個單元，我們會用一個 LeetCode 題目帶大家實際使用 RSpec 進行練習！
+下個單元，我們會一邊練習邊寫測試，邊解開一個 LeetCode 題目。
 
 
-## Quiz
+#### Quiz
 
-### Q1
+#### Q1
 
 ```ruby
 require_relative 'leetcode.rb'
@@ -241,20 +251,20 @@ end
 
 以上是一個測試程式，請根據該測試程式從下面選出正確的選項（多選題）
 
-- <mark>要測試的程式檔名為 leetcode.rb</mark>
-- <mark>共有三個測試案例</mark>
-- <mark>如果輸入的不是 leet 或 code，結果為 bug</mark>
-- <mark> leetcode.rb 會把字串 leet 和 code 進行切換</mark>
+- 要測試的程式檔名為 leetcode.rb
+- 專案資料夾內至少有三個測試案例
+- 如果輸入的不是 leet 或 code，預期結果為 bug
+-  leetcode.rb 這支程式的目的，是要把字串 leet 和 code 進行切換
 
 答：1、2、3、4
 註記：我們會用 require_relative 把程式檔加入，因此 require_relative 旁的就是程式檔名。測試程式有三個 it，因此共有三個測試案例。第一和第二個測試案例會把 leet 和 code 切換，而第三個測試案例會把其他的字串轉換成 bug。
 
-### Q2
+##### Q2
 
 以下哪個是執行 fizzbuzz 的自動化測試的 RSpec 指令？（單選題）
 
 - rspec fizzbuzz.rb
-- <mark>rspec fizzbuzz_spec.rb</mark>
+- rspec fizzbuzz_spec.rb
 - fizzbuzz(4)
 - gem install rspec
 

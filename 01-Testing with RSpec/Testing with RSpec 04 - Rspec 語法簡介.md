@@ -7,26 +7,26 @@
 ### RSpec 指令
 
 安裝 RSpec：
-```
-gem install rspec
+```bash
+[~] $ gem install rspec
 ```
 
 要設定 RSpec 的產出格式需要 **.rspec** 檔，你可以手動創建一個，或使用指令創建 .rspec 檔：
-```
-rspec --init
+```bash
+[~] $ rspec --init
 ```
 **.rspec** 檔主要是讓我們在使用 `rspec` 指令執行測試程式時，帶入**.rspec** 檔內的設定作為副指令，如：
 - `--format documentation`：產出更詳盡的分類和測試案例
 - `--color`：產出結果用顏色區分
 
 若你想認識更多的 rspec 副指令，可用 `--help` 查詢：
-```
-rspec  --help
+```bash
+[~] $ rspec  --help
 ```
 
 執行測試程式：
-```
-rspec filename
+```bash
+[~] $ rspec filename
 ```
 
 ### RSpec 資料夾結構
@@ -129,11 +129,6 @@ expect(actual).not_to eq(wrong_result)
 
 使用 `before` 和 `after` 可以在每段 `it` 或 `describe` 執行前後進行程式碼的設定，如：宣告物件、加入物件新的資料。
 
-- `before(:each)`：每段 `it` 前執行
-- `before(:all)`：整段 `describe` 前只執行一次
-- `after(:each)`：每段 `it` 後執行
-- `after(:all)`：整段 `describe` 後只執行一次
-
 以下提供一範例，在每個 `it` 開始前使用 `before` 宣告好 `user` 和 `transaction`，在 `it` 內只設定 `total` 屬性：
 
 ```Ruby
@@ -141,7 +136,7 @@ describe Transaction do
   describe "#price" do
     context "If user is member" do
 
-      before(:each) do
+      before do
         @user = User.new( :is_member => true )
         @transaction = Transaction.new( :user => @user )
       end
@@ -179,8 +174,8 @@ describe "將整數反轉過來" do
     expect(result).to eq(-401)
   end
 
-  xit "4611686018427387906 結果應為 0" do
-    result = reverse_integer(4611686018427387906)
+  xit "2147483650 結果應為 0" do
+    result = reverse_integer(2147483650)
     expect(result).to eq(0)
   end
 
@@ -217,7 +212,7 @@ require_relative "user.rb"
 describe "calculate age" do
     context "age below or equal to 18" do
 
-      before(:each) do
+      before do
         @user = User.new()
       end
 
