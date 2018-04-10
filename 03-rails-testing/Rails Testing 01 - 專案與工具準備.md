@@ -56,6 +56,9 @@ end
 
 （編註：FactoryGirl 已於 2017 年底更名為 FactoryBot，若你進入 GitHub 的網頁會注意到 gem 的名稱變動，但由於絕大多數網路資料仍稱其 FactoryGirl，Ruby 程式碼內的常數名稱也仍是 （編註：FactoryGirl，故本教案仍稱此服務為 FactoryGirl。）
 
+<mark>DEPRECATION WARNING: The factory_girl gem is deprecated. Please upgrade to factory_bot. See https://github.com/thoughtbot/factory_bot/blob/v4.9.0/UPGRADE_FROM_FACTORY_GIRL.md for further instructions. (called from <top (required)> at /Users/ellenlee/restaurant_forum/config/application.rb:7)
+Running via Spring preloader in process 50643</mark>
+
 安裝 [factory_girl_rails](https://github.com/thoughtbot/factory_girl_rails) ：
 
 ```ruby
