@@ -56,14 +56,13 @@ end
 
 （編註：FactoryGirl 已於 2017 年底更名為 FactoryBot，若你進入 GitHub 的網頁會注意到 gem 的名稱變動，但由於絕大多數網路資料仍稱其 FactoryGirl，Ruby 程式碼內的常數名稱也仍是 （編註：FactoryGirl，故本教案仍稱此服務為 FactoryGirl。）
 
-<mark>DEPRECATION WARNING: The factory_girl gem is deprecated. Please upgrade to factory_bot. See https://github.com/thoughtbot/factory_bot/blob/v4.9.0/UPGRADE_FROM_FACTORY_GIRL.md for further instructions. (called from <top (required)> at /Users/ellenlee/restaurant_forum/config/application.rb:7)
-Running via Spring preloader in process 50643</mark>
+<mark>改成 Factory Bot</mark>
 
 安裝 [factory_girl_rails](https://github.com/thoughtbot/factory_girl_rails) ：
 
 ```ruby
 group :development, :test do
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
 end
 ```
 *Path: Gemfile*
@@ -77,7 +76,7 @@ end
 ```ruby
 RSpec.configure do |config|
   # 其他預設設定
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 end
 ```
 *Path: spec/spec_helper.rb*
@@ -86,17 +85,16 @@ end
 安裝完成之後，我們必須先針對目標 model 新增相對應的設定檔。舉例來說，假設我們要新增 `user` model 的假資料，就會加在 `spec/factories/` 目錄下面建立 `model.rb` 檔案，並撰寫 User Model 需要的資料內容，如下：
 
 ```
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
-    sequence(:username) { |n| "user#{n}" }
+    sequence(:name) { |n| "user#{n}" }
     sequence(:email) { |n| "user#{n}@gmail.com" }
-    phone_number { "0227011001" }
-    nickname { FFaker::Name.last_name }
-    description { FFaker::Lorem.sentence }
+    password { "12345678" }
+    intro { FFaker::Lorem.sentence }
   end
 end
 ```
-*Path: spec/model/factories/model.rb*
+*Path: spec/factories/model.rb*
 
 在這裡我們沿用了專案[稍早安裝的 FFaker gem](https://lighthouse.alphacamp.co/units/426) 來產生亂數資料。做好以上設定之後，之後就可以在測試裡面透過 `Factory.create(:user)` 的 API 來幫我們建立新的 user，加速開發的流程。如果針對 user 的屬性需要更詳細的調整，可以參考[官方文件](https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#configure-your-test-suite)。
 
