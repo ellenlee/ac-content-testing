@@ -58,11 +58,13 @@ end
 
 （FactoryBot 原名為 FactoryGirl，已於 2017 年底更名為 FactoryBot，由於更名不久，絕大多數網路資料仍稱其 FactoryGirl，請同學查詢資料時特別注意。）
 
-安裝 [factory_bot_rails](https://github.com/thoughtbot/factory_bot_rails) ：
+以下按照 FactoryBot 提供的[說明文件](https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md)，講解安裝步驟。
+
+首先安裝 [factory_bot_rails](https://github.com/thoughtbot/factory_bot_rails) ：
 
 ```ruby
 group :development, :test do
-  gem 'factory_bot_rails'
+  gem "factory_bot_rails", "~> 4.0"
 end
 ```
 *Path: Gemfile*
@@ -71,17 +73,25 @@ end
 [~/restaurant_forum] $ bundle install
 ```
 
-接著請你打開 **spec/spec_helper.rb**，找到適當的位置，加上 FactoryGirl 的設定，請注意要寫在 `RSpec.configure do |config| ... end` 的區塊內：
+接著請你建立一個 **spec/support/factory_bot.rb** 檔案，加入 FactoryBot 的設定：
 
 ```ruby
 RSpec.configure do |config|
-  # 其他預設設定
   config.include FactoryBot::Syntax::Methods
 end
 ```
-*Path: spec/spec_helper.rb*
+*Path: spec/support/factory_bot.rb*
 
-安裝完成之後，我們必須先針對目標 model 新增相對應的設定檔。舉例來說，假設我們要新增 `user` model 的假資料，你會需要在 `spec/factories/` 目錄下面建立 `model.rb` 檔案（目錄與檔案請手動建立），並撰寫 `User` model 需要的資料內容，如下：
+然後記得到 **spec/rails_helper.rb** 檔案上方載入你剛才新建的設定檔：
+
+```ruby
+# 預設載入的設定
+# Add additional requires below this line. Rails is not loaded until this point!
+require 'support/factory_bot'
+```
+*Path: spec/rails_helper.rb*
+
+安裝完成之後，你就可以針對目標 model 新增相對應的設定檔。舉例來說，假設我們要新增 `user` model 的假資料，你會需要在 `spec/factories/` 目錄下面建立 `model.rb` 檔案（目錄與檔案請手動建立），並撰寫 `User` model 需要的資料內容，如下：
 
 ```ruby
 factory :user do
@@ -115,9 +125,9 @@ end
 [~/restaurant_forum] $ bundle install
 ```
 
-在 `spec/rails_helper.rb` 裡面新增設定：
+在 `spec/rails_helper.rb` 的檔案最下方新增設定：
 
-```
+```ruby
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
@@ -131,7 +141,7 @@ end
 
 現在你可以使用更直覺的方式做測試，像是測試 user.name 的 validation：
 
-```
+```ruby
 RSpec.describe User, type: :model do
   it { should validate_presence_of(:name) }
 end
@@ -139,7 +149,7 @@ end
 
 或是測試兩個 model 之間的關聯：
 
-```
+```ruby
 RSpec.describe User, type: :model do
   it { should have_many(:restaurants) }
 end
@@ -154,7 +164,7 @@ end
 本章節介紹的測試工具都有各自的語法，在你需要客製化設定時，就需要到以下的專案文件內查詢：
 
 - RSpec：http://rspec.info/documentation/
-- FactoryBot：https://github.com/thoughtbot/factory_bot
+- FactoryBot：https://github.com/thoughtbot/factory_bot_rails
 - Shoulda-matchers：https://github.com/thoughtbot/shoulda-matchers
 
 ### 參考程式碼
