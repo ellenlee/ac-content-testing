@@ -1,6 +1,9 @@
 ## 專案與工具準備
+> 認識實務上會和 RSpec 搭配的套件如 FactoryBot 和 Shoulda-matchers
 
-在之前 TDD 相關的單元裡面，我們已經蠻詳盡的介紹 TDD 的用法和好處，也圍繞著冷氣遙控器舉了幾個例子。接下來，我們會針對 Rails 討論測試的概念，以及搭配的測試工具。
+在之前 TDD 相關的單元裡面，我們已經蠻詳盡的介紹 TDD 的用法和好處，也圍繞著冷氣遙控器舉了幾個例子。在接下來的幾個單元，我們會針對 Rails 討論測試的概念，並且搭配實務工具來撰寫測試。
+
+在這個單元裡，我們會先介紹實務上常用的工具如 FactoryBot 和 Shoulda-matchers，這些工具的目的是幫助工程師能更加方便地撰寫、維護測試，請你先把工具安裝好，至於工具的使用方法和細節，之後會一邊實作、一邊展示。
 
 ### 專案準備：餐廳論壇
 
@@ -12,7 +15,7 @@
 
 在正式開始之前，我們需要安裝一些需要的工具，加速我們撰寫測試的過程。
 
-首先是 RSpec，在整合到 Ruby on Rails 時，我們會使用 [rspec-rails](https://github.com/rspec/rspec-rails) 這個 gem，請你在 **Gemfile** 裡面加上：
+首先是 RSpec，在整合到 Ruby on Rails 時，我們會使用 [rspec-rails](https://github.com/rspec/rspec-rails) 這個 gem，請注意要加在 `:development, :test` 的群組裡，來和正式 production 的環境做區分：
 
 ```ruby
 group :development, :test do
@@ -21,7 +24,6 @@ end
 ```
 *Path: Gemfile*
 
-請注意要加在 `:development, :test` 的群組裡，來和正式 production 的環境做區分。
 
 然後執行：
 ```bash
@@ -46,19 +48,17 @@ end
 [~/restaurant_forum] $ bundle exec rspec
 ```
 
-順利的話會看到下面的畫面
+順利的話會看到下面的畫面：
 
 ![image](images/01-install-check.png)
 
-### 安裝 factory_girl_rails
+### 安裝 FactoryBot
 
-撰寫測試時，由於每個 `it` 是獨立的，因此每次都要重新建立測試用的假資料。你現在已經知道可以用 `before` 的方法來做一次性的宣告。然而，當 Model 之間的關聯變得複雜時，資料建置就會愈來愈麻煩。因此，實務上會搭配 FactoryGirl 這個函式庫，用來快速產生假資料，可以省下很多準備資料的時間。
+撰寫測試時，由於每個 `it` 是獨立的，因此每次都要重新建立測試用的假資料，你現在已經知道可以用 `before` 的方法來做一次性的宣告。然而，當 Model 之間的關聯變得複雜時，資料建置就會愈來愈麻煩。因此，實務上會搭配 FactoryBot 這個函式庫，用來快速產生假資料，可以省下很多準備資料的時間。
 
-（編註：FactoryGirl 已於 2017 年底更名為 FactoryBot，若你進入 GitHub 的網頁會注意到 gem 的名稱變動，但由於絕大多數網路資料仍稱其 FactoryGirl，Ruby 程式碼內的常數名稱也仍是 （編註：FactoryGirl，故本教案仍稱此服務為 FactoryGirl。）
+（FactoryBot 原名為 FactoryGirl，已於 2017 年底更名為 FactoryBot，由於更名不久，絕大多數網路資料仍稱其 FactoryGirl，請同學查詢資料時特別注意。）
 
-<mark>改成 Factory Bot</mark>
-
-安裝 [factory_girl_rails](https://github.com/thoughtbot/factory_girl_rails) ：
+安裝 [factory_bot_rails](https://github.com/thoughtbot/factory_bot_rails) ：
 
 ```ruby
 group :development, :test do
@@ -71,7 +71,7 @@ end
 [~/restaurant_forum] $ bundle install
 ```
 
-接著請你打開 **spec/spec_helper.rb**，找到適當的位置，加上 FactoryGirl 的設定：
+接著請你打開 **spec/spec_helper.rb**，找到適當的位置，加上 FactoryGirl 的設定，請注意要寫在 `RSpec.configure do |config| ... end` 的區塊內：
 
 ```ruby
 RSpec.configure do |config|
@@ -81,27 +81,25 @@ end
 ```
 *Path: spec/spec_helper.rb*
 
+安裝完成之後，我們必須先針對目標 model 新增相對應的設定檔。舉例來說，假設我們要新增 `user` model 的假資料，你會需要在 `spec/factories/` 目錄下面建立 `model.rb` 檔案（目錄與檔案請手動建立），並撰寫 `User` model 需要的資料內容，如下：
 
-安裝完成之後，我們必須先針對目標 model 新增相對應的設定檔。舉例來說，假設我們要新增 `user` model 的假資料，就會加在 `spec/factories/` 目錄下面建立 `model.rb` 檔案，並撰寫 User Model 需要的資料內容，如下：
-
-```
-FactoryBot.define do
-  factory :user do
-    sequence(:name) { |n| "user#{n}" }
-    sequence(:email) { |n| "user#{n}@gmail.com" }
-    password { "12345678" }
-    intro { FFaker::Lorem.sentence }
-  end
+```ruby
+factory :user do
+  sequence(:name) { |n| "user#{n}" }
+  sequence(:email) { |n| "user#{n}@gmail.com" }
+  password { "12345678" }
+  intro { FFaker::Lorem.paragraph }
 end
 ```
 *Path: spec/factories/model.rb*
 
-在這裡我們沿用了專案[稍早安裝的 FFaker gem](https://lighthouse.alphacamp.co/units/426) 來產生亂數資料。做好以上設定之後，之後就可以在測試裡面透過 `Factory.create(:user)` 的 API 來幫我們建立新的 user，加速開發的流程。如果針對 user 的屬性需要更詳細的調整，可以參考[官方文件](https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md#configure-your-test-suite)。
+在這裡我們沿用了專案[稍早安裝](https://lighthouse.alphacamp.co/units/426)的 [FFaker](https://github.com/ffaker/ffaker) 套件來產生亂數資料。做好以上設定之後，之後就可以在測試裡面透過 `Factory.create(:user)` 的 API 來幫我們建立新的 user，加速開發的流程。
 
+如果要針對物件屬性需要更詳細的調整，可以參考[官方文件](https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#configure-your-test-suite)，請你參考 FactoryBot 的語法說明，建立你的程式所需的假資料。
 
 ### 安裝 Shoulda-matchers
 
-Shoulda-matchers 是一個 RSpec 的補充包，裡面針對 `ActiveModel`、`ActiveRecord` 和 `ActionController` 的設定提供了方便的 API 來進行測試。
+[Shoulda-matchers](https://github.com/thoughtbot/shoulda-matchers) 是一個 RSpec 的補充包，裡面針對 `ActiveModel`、`ActiveRecord` 和 `ActionController` 的設定提供了方便的 API 來進行測試。
 
 安裝 shoulda-matchers：
 
@@ -117,7 +115,7 @@ end
 [~/restaurant_forum] $ bundle install
 ```
 
-在 `spec/rails_helper.rb` 裡面新增設定
+在 `spec/rails_helper.rb` 裡面新增設定：
 
 ```
 Shoulda::Matchers.configure do |config|
@@ -132,7 +130,6 @@ end
 
 
 現在你可以使用更直覺的方式做測試，像是測試 user.name 的 validation：
-<mark>Ellen: 能否把以下示範和原本的「不直覺」做個比較？</mark>
 
 ```
 RSpec.describe User, type: :model do
@@ -147,13 +144,23 @@ RSpec.describe User, type: :model do
   it { should have_many(:restaurants) }
 end
 ```
-這一章介紹了許多方便的工具，讓我們撰寫測試維護更加的方便。關於這些工具的使用方法和細節，在每個專案的文件裡面都有詳細的紀錄，由於內容繁多，請有需要的學員自行到專案裡面查詢。下一章我們會示範這些工具在各種不同的測試情境裡面將如何幫助我們開發。
 
-```
-#### 參考連結
-<mark>Ellen: 麻煩上架人員注意此區域的格式（使用黃色 div）</mark>
+現在我們裝好了寫測試的工具，接下來要進入實作了！
 
-- http://rspec.info/documentation/
-- https://github.com/thoughtbot/factory_girl_rails
-- https://github.com/thoughtbot/shoulda-matchers
-```
+---
+
+### 參考資源
+
+本章節介紹的測試工具都有各自的語法，在你需要客製化設定時，就需要到以下的專案文件內查詢：
+
+- RSpec：http://rspec.info/documentation/
+- FactoryBot：https://github.com/thoughtbot/factory_bot
+- Shoulda-matchers：https://github.com/thoughtbot/shoulda-matchers
+
+### 參考程式碼
+
+|Commit Message|GitHub Link|
+|:------|:------|
+|install RSpec|[LINK]()|
+|install FactoryBot|[LINK]()|
+|install Shoulda-matchers|[LINK]()|
