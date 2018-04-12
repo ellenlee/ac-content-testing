@@ -91,21 +91,40 @@ require 'support/factory_bot'
 ```
 *Path: spec/rails_helper.rb*
 
-安裝完成之後，你就可以針對目標 model 新增相對應的設定檔。舉例來說，假設我們要新增 `user` model 的假資料，你會需要在 `spec/factories/` 目錄下面建立 `model.rb` 檔案（目錄與檔案請手動建立），並撰寫 `User` model 需要的資料內容，如下：
+安裝完成之後，你就可以針對目標 model 新增相對應的設定檔，請你建立一個檔案 `spec/factories/model.rb`，用來存放和 model 相關的設定檔。並且參考你之前在「餐廳專案」定義的假資料，搭配 FactoryBot 的[語法說明]((https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#configure-your-test-suite)，完成測試需要的資料內容，如下：
 
 ```ruby
-factory :user do
-  sequence(:name) { |n| "user#{n}" }
-  sequence(:email) { |n| "user#{n}@gmail.com" }
-  password { "12345678" }
-  intro { FFaker::Lorem.paragraph }
+FactoryBot.define do
+  factory :user do
+    sequence(:name) { |n| "user#{n}" }
+    sequence(:email) { |n| "user#{n}@gmail.com" }
+    password { "12345678" }
+    intro { FFaker::Lorem.paragraph }
+  end
+
+  factory :category do
+    sequence(:name) { |n| "category#{n}" }
+  end
+
+  factory :restaurant do
+    sequence(:name) { |n| "restaurant#{n}" }
+    opening_hours { FFaker::Time.datetime }
+    tel { FFaker::PhoneNumber.short_phone_number }
+    address { FFaker::Address.street_address }
+    description { FFaker::Lorem.paragraph }
+    category
+  end
+
+  factory :comment do
+    content { FFaker::Lorem.sentence }
+    user
+    restaurant
+  end
 end
 ```
 *Path: spec/factories/model.rb*
 
-在這裡我們沿用了專案[稍早安裝](https://lighthouse.alphacamp.co/units/426)的 [FFaker](https://github.com/ffaker/ffaker) 套件來產生亂數資料。做好以上設定之後，之後就可以在測試裡面透過 `Factory.create(:user)` 的 API 來幫我們建立新的 user，加速開發的流程。
-
-如果要針對物件屬性需要更詳細的調整，可以參考[官方文件](https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#configure-your-test-suite)，請你參考 FactoryBot 的語法說明，建立你的程式所需的假資料。
+在這裡我們沿用了專案[稍早安裝](https://lighthouse.alphacamp.co/units/426)的 [FFaker](https://github.com/ffaker/ffaker) 套件來產生亂數資料。做好以上設定之後，之後就可以在測試裡面透過類似 `Factory.create(:user)` 的 API 來幫我們建立新的 user，加速開發的流程。
 
 ### 安裝 Shoulda-matchers
 
