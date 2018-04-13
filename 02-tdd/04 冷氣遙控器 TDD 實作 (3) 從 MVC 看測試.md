@@ -24,28 +24,18 @@
 組合起來，組成 model 的完整測試：
 
 ```ruby
-# spec/air_conditioner_spec.rb
+測試 "若冷氣開啟 -> 「判斷是否開啟」回傳值應為 True" do
+  打開冷氣
+  呼叫紅外線發射器
+  假設發送指令給冷氣的回傳值是 True
+  預期(冷氣.是否開啟(設定紅外線)) == True
+end
 
-require 'air_conditioner'
-
-RSpec.describe AirConditioner, "ac" do
-  before do
-    選出要進行測試的冷氣機
-  end
-
-  it "若冷氣開啟 -> 「判斷是否開啟」回傳值應為 True" do
-    打開冷氣
-    呼叫紅外線發射器
-    假設發送指令給冷氣的回傳值是 True
-    預期(冷氣.是否開啟(設定紅外線)) == True
-  end
-
-  it "若冷氣關閉 -> 「判斷是否開啟」回傳值應為 False" do
-    關閉冷氣
-    呼叫紅外線發射器
-    假設發送指令給冷氣的回傳值是 False
-    預期(冷氣.是否開啟(設定紅外線)) == False
-  end
+測試 "若冷氣關閉 -> 「判斷是否開啟」回傳值應為 False" do
+  關閉冷氣
+  呼叫紅外線發射器
+  假設發送指令給冷氣的回傳值是 False
+  預期(冷氣.是否開啟(設定紅外線)) == False
 end
 ```
 
@@ -62,21 +52,16 @@ end
 組合起來，組成 controller 的完整測試：
 
 ```ruby
-require 'air_conditioner_controller'
+測試 "如果冷氣沒開，冷氣遙控器會發射開機訊號 " do
+  設定紅外線發射器
+  冷氣開啟狀態 -> 沒開
+  預期（假的紅外線）會（發射開機指令給冷氣）
+end
 
-RSpec.describe AirConditionerController, "acc" do
-  before do
-    選出要進行測試的冷氣機和遙控器
-  end
-
-  # 其他測試案例
-
-  it "should controller open work" do
-    設定「冷氣開啟狀態」 -> 關機
-    設定「冷氣插電狀態」 -> 有插電
-    冷氣遙控器.打開冷氣()
-    預期(冷氣狀態) == 運作中
-  end
+測試 "如果冷氣已經開啟，冷氣遙控器不會發射開機訊號 " do
+  設定紅外線發射器
+  冷氣開啟狀態 -> 已開啟
+	預期（假的紅外線）不會（發射開機指令給冷氣）
 end
 ```
 
@@ -94,20 +79,11 @@ view 在冷氣遙控器裡面對應到儀表板 (dashboard)，負責顯示目前
 以下為 view 的測試案例：
 
 ```ruby
-require 'air_conditioner_controller'
-
-RSpec.describe AirConditionerController, "acc" do
-  before do
-    選出要進行測試的冷氣機和遙控器
-  end
-
-  # 其他測試案例
-
-  測試 "儀表板上負責顯示開關的區塊正確顯示" do
-    設定「冷氣開啟狀態」 -> 關機
-    冷氣遙控器.打開冷氣()
-    預期(冷氣遙控器儀表板) 有 "on" 的訊息
-  end
+測試 "儀表板上負責顯示開關的區塊正確顯示" do
+  設定「冷氣開啟狀態」 -> 關機
+  冷氣遙控器.打開冷氣()
+  預期(冷氣遙控器儀表板) 有 "on" 的訊息
+end
 ```
 
 以上我們對 model、controller、view 三個層級，分別舉出了一個測試案例，希望有助於讓你體會到 MVC 不同的測試重點。
