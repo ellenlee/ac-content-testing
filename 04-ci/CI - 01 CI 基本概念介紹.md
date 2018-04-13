@@ -1,4 +1,6 @@
 ## 認識 Continuously Integration
+> 能夠解釋什麼是 Continuously Integration
+> 能夠解釋 CI 在軟體開發中扮演的角色
 
 ### Continuously Integration
 
