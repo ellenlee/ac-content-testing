@@ -1,32 +1,33 @@
-## CI 任務進階篇
-
-在上一章介紹了 CI 任務基礎，透過這些已經跟 GitHub 整合過的服務，我們很容易可以透過幫專案設定任務，讓我們的開發過程更完整和流暢。然而，有時候這些任務沒辦法滿足我們的需求，這個時候就要透過客製化任務幫我們完成更複雜的需求。這一章要介紹進階任務的定位和功能，以及怎麼把客製化任務導入專案。
+## 客製化 CI 任務：Circle CI
+> 能夠為專案設定客製化的 CI 任務
 
 ### 客製化任務
 
-在每個 branch 推上線之後，為了減少新的代碼在實際部署到 production 後可能會發生的問題，我們希望能夠在一個實際模擬線上環境的地方實際把 app 跑起來試試看。除此之外，我們也會在上面跑測試，甚至 build docker image，這些比較複雜的任務會透過客製化任務來達成。
+上個單元我們用的 Rollbar 服務和 GitHub 已經有很好的整合，我們可以很容易地為專案設定任務，讓我們的開發過程更完整和流暢。
 
-下面我們會示範如何在 Circle CI 上執行 RSpec。
+然而，有時候你的需求比較複雜，可能需要導入客製化的任務。舉例來說，在每個 branch 推上線之後，為了減少新的代碼在實際部署到 production 後可能會發生的問題，我們希望能夠先在一個模擬的環境中，把 app 跑起來試試看。我們還希望能在這個模擬環境裡跑測試，甚至 build docker image。
+
+上述任務需要透過客製化的 CI 任務來達成。接下來我們會以 Circle CI 為例，示範如何在 Circle CI 上執行 RSpec。
 
 ### Circle CI 設定
 
-Step1
+#### Step1
 
 打開瀏覽器連上 [Circle CI](http://circleci.com/) ，選擇 `Sign in with GitHub`
 
-Step2
+####  Step2
 
 進入主畫面，選擇 `Skip - I don't want to follow any projects`
 
 ![圖一](images/CI-0301.png)
 
-Step3
+#### Step3
 
 找到自己的專案，按下 `setup project`
 
 ![圖二](images/CI-0302.png)
 
-Step4
+#### Step4
 
 選擇自己喜歡的參數，建議設定如下:
 
@@ -34,15 +35,13 @@ Step4
 - Platform 選擇 2.0
 - Language 選擇 Ruby
 
-Step5
+#### Step5
 
-接下來我們要撰寫自己的 `circle.yml`， Circle CI 的 Server 會用這個檔案裡面的內容決定之後每一次執行的環境和指令。在照著 `Next Steps` 操作之前，我們必須先建立適合自己專案的 `.circleci/config.yml`。
+接下來我們要撰寫自己的 **circle.yml**， Circle CI 的 Server 會用這個檔案裡面的內容，決定之後每一次執行的環境和指令。在照著 `Next Steps` 操作之前，我們必須先建立適合自己專案的 **.circleci/config.yml**。
 
-Step6
+依照每個人的需求不同，設定檔也會不同，以下提供參考：
 
-我自已的 circle.yml 如下:
-
-```
+```ruby
 version: 2
 jobs:
   build:
@@ -94,40 +93,36 @@ jobs:
 
 ```
 
-設定檔大概會長得像上面這樣，依照每個人的需求不同，可能會有部分不一樣。再檔案編輯完成之後，記得把代碼推上 GitHub。
+設定 config.yml 的過程比較複雜，可能會需要多試幾次，如果不知道自己的專案該怎麼設定，記得上討論區提問。如果設定成功，也記得上討論區分享自已的 **config.yml**。
 
-Step7
+檔案編輯完成之後，記得把代碼推上 GitHub。
 
-確認推上 GitHub 之後，點擊步驟五的 Start Build
+#### Step7
+
+確認推上 GitHub 之後，點擊「Start Build」按鈕：
 
 ![圖三](images/CI-0303.png)
 
-Step8
+#### Step8
 
 這個時候 Circle CI 就開始 build 你的專案，選擇左邊欄位第一個 `BUILDS` 看看 build 的情況吧！順利的話他會顯示 `RUNNING`。
 
-Step9
-
-失敗是在所難免的，如果不幸真的失敗了，記得點進去看看失敗的原因，重新調整`config.yml` 檔案的設定。
+失敗是在所難免的，如果不幸真的失敗了，記得點進去看看失敗的原因，重新調整 **config.yml** 檔案的設定。
 
 ![圖四](images/CI-0304.png)
 
-Step10
+### 運用 CI 來管理程式碼
 
-每一次調整完，只要記得把代碼推上 GitHub，Github 就會主動通知 Circle CI。終於，在無數次的失敗之後，我們成功了！可以看到狀態從紅色的 `FAILED` 轉變成綠色的 `FIXED`。
+接下來就可以透過 CI 來維護程式碼了。只要記得把代碼推上 GitHub，Github 就會主動通知 Circle CI。終於，在無數次的失敗之後，我們成功了！可以看到狀態從紅色的 `FAILED` 轉變成綠色的 `FIXED`。
 
 ![圖五](images/CI-0305.png)
 
-Step11
-
-回到 GitHub 的 branch 裡面，會發現 master branch 的狀態顯示為通過！
+此時，回到 GitHub 的 branch 裡面，會發現 master branch 的狀態顯示為通過！
 
 ![圖六](images/CI-0306.png)
 
-### 小結
+以上是 Circle CI 的安裝說明，希望透過 Circle CI 的安裝與設定，能讓你感受到什麼是「客製化任務」。
 
-這一章我們嘗試在 Circle CI 的 server 上面將專案設定好，並且成功的將測試跑起來。設定 config.yml 的過程比較複雜，可能會需要多試幾次，如果不知道自己的專案該怎麼設定，記得上討論區提問。如果設定成功，也記得上討論區分享自已的 config.yml。如果對於上面的內容覺得不夠清楚，所有的代碼都可以在這個 [Repo](https://github.com/frozenfung/ci-sample) 找到。
+### 參考程式碼
 
-### 參考資料
-
-- https://circleci.com/docs/
+本單元裡的程式碼可以在 [這裡](https://github.com/frozenfung/ci-sample) 找到。
