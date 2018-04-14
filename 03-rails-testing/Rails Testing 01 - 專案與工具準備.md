@@ -126,6 +126,52 @@ end
 
 在這裡我們沿用了專案[稍早安裝](https://lighthouse.alphacamp.co/units/426)的 [FFaker](https://github.com/ffaker/ffaker) 套件來產生亂數資料。做好以上設定之後，之後就可以在測試裡面透過類似 `Factory.create(:user)` 的 API 來幫我們建立新的 user，加速開發的流程。
 
+### 安裝 rails-controller-testing
+[rails-controller-testing](https://github.com/rails/rails-controller-testing) 是一個 RSpec 的輔助套件，他提供兩個功能分別是 `assigns` 和 `assert_template`。 `assigns` 能幫我們提供取得傳進去 view 的 instance variable 的值，而 `assert_template` 能幫我們確認 view 有沒有被正確的 render，詳細的教學請參考[官方的使用手冊](https://github.com/rails/rails-controller-testing#usage)。
+
+安裝 rails-controller-testing：
+
+```ruby
+group :development, :test do
+  gem 'rails-controller-testing'
+end
+```
+*Path: Gemfile*
+
+### 安裝 database_cleaner
+[database_cleaner](https://github.com/DatabaseCleaner/database_cleaner) 是一個 RSpec 的輔助套件，他能夠幫助你在每次測試開始之前建立一個乾淨的環境，讓你每次測試的狀態不受之前測試的過程影響，增加測試執行的正確率。
+
+安裝 database_cleaner：
+
+```ruby
+group :development, :test do
+  gem 'database_cleaner'
+end
+```
+*Path: Gemfile*
+
+在 `spec/rails_helper.rb` 的檔案最下方新增設定：
+
+```ruby
+RSpec.configure do |config|
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
+
+end
+```
+*Path: spec/rails_helper.rb*
+
+透過上面的設定，我們在每個測試執行之前，都會把資料庫的內容清空。
+
 ### 安裝 Shoulda-matchers
 
 [Shoulda-matchers](https://github.com/thoughtbot/shoulda-matchers) 是一個 RSpec 的補充包，裡面針對 `ActiveModel`、`ActiveRecord` 和 `ActionController` 的設定提供了方便的 API 來進行測試。
@@ -173,6 +219,18 @@ RSpec.describe User, type: :model do
   it { should have_many(:restaurants) }
 end
 ```
+
+### Devise 登入/登出 API 設定
+在測試的許多情境裡面常常都會需要讓使用者登入或是登出，以順利完成後續的行為。為了讓我們在測試的程式裡面也能夠自在的呼叫 Devise 的登入/登出 API，我們需要下列的設定：
+
+```ruby
+require 'devise'
+
+config.include Devise::Test::ControllerHelpers, :type => :controller
+```
+*Path: spec/rails_helper.rb*
+
+之後我們就能在測試的程式裡面使用 `sign_in user` 和 `sign_out`
 
 現在我們裝好了寫測試的工具，接下來要進入實作了！
 
