@@ -1,9 +1,9 @@
 ## 專案與工具準備
-> 認識實務上會和 RSpec 搭配的套件如 FactoryBot 和 Shoulda-matchers
+> 認識實務上會和 RSpec 搭配的套件，並完成套件設定
 
 在之前 TDD 相關的單元裡面，我們已經蠻詳盡的介紹 TDD 的用法和好處，也圍繞著冷氣遙控器舉了幾個例子。在接下來的幾個單元，我們會針對 Rails 討論測試的概念，並且搭配實務工具來撰寫測試。
 
-在這個單元裡，我們會先介紹實務上常用的工具如 FactoryBot 和 Shoulda-matchers，這些工具的目的是幫助工程師能更加方便地撰寫、維護測試，請你先把工具安裝好，至於工具的使用方法和細節，之後會一邊實作、一邊展示。
+在這個單元裡，我們會先介紹實務上寫測試時會搭配的常用工具，這些工具的目的是幫助工程師能更加方便地撰寫、維護測試，請你先把工具安裝好，至於工具的使用方法和細節，之後會一邊實作、一邊展示。
 
 ### 專案準備：餐廳論壇
 
@@ -91,7 +91,9 @@ require 'support/factory_bot'
 ```
 *Path: spec/rails_helper.rb*
 
-安裝完成之後，你就可以針對目標 model 新增相對應的設定檔，請你建立一個檔案 `spec/factories/model.rb`，用來存放和 model 相關的設定檔。並且參考你之前在「餐廳專案」定義的假資料，搭配 FactoryBot 的[語法說明]((https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#configure-your-test-suite)，完成測試需要的資料內容，如下：
+安裝完成之後，你就可以針對目標 model 新增相對應的設定檔，請你建立一個檔案 `spec/factories.rb`，用來存放相關的設定檔。並且參考你之前在「餐廳專案」定義的假資料，搭配 FactoryBot 的[語法說明](https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#configure-your-test-suite)，完成測試需要的資料內容，在設定假資料時，也可以繼續沿用專案[稍早安裝](https://lighthouse.alphacamp.co/units/426)的 [FFaker](https://github.com/ffaker/ffaker) 套件來產生亂數資料。
+
+完成後的設定如下：
 
 ```ruby
 FactoryBot.define do
@@ -122,9 +124,9 @@ FactoryBot.define do
   end
 end
 ```
-*Path: spec/factories/model.rb*
+*Path: spec/factories.rb*
 
-在這裡我們沿用了專案[稍早安裝](https://lighthouse.alphacamp.co/units/426)的 [FFaker](https://github.com/ffaker/ffaker) 套件來產生亂數資料。做好以上設定之後，之後就可以在測試裡面透過類似 `Factory.create(:user)` 的 API 來幫我們建立新的 user，加速開發的流程。
+做好以上設定之後，之後就可以在測試裡面透過類似 `Factory.create(:user)` 的 API 來幫我們建立新的 user，加速開發的流程。
 
 ### 安裝 rails-controller-testing
 [rails-controller-testing](https://github.com/rails/rails-controller-testing) 是一個 RSpec 的輔助套件，他提供兩個功能分別是 `assigns` 和 `assert_template`。 `assigns` 能幫我們提供取得傳進去 view 的 instance variable 的值，而 `assert_template` 能幫我們確認 view 有沒有被正確的 render，詳細的教學請參考[官方的使用手冊](https://github.com/rails/rails-controller-testing#usage)。
@@ -154,7 +156,6 @@ end
 
 ```ruby
 RSpec.configure do |config|
-
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
@@ -165,7 +166,6 @@ RSpec.configure do |config|
       example.run
     end
   end
-
 end
 ```
 *Path: spec/rails_helper.rb*
@@ -226,6 +226,7 @@ end
 ```ruby
 require 'devise'
 
+# 請注意此行要加在 RSpec.configure do |config| 之後
 config.include Devise::Test::ControllerHelpers, :type => :controller
 ```
 *Path: spec/rails_helper.rb*
@@ -246,8 +247,4 @@ config.include Devise::Test::ControllerHelpers, :type => :controller
 
 ### 參考程式碼
 
-|Commit Message|GitHub Link|
-|:------|:------|
-|install RSpec|[LINK]()|
-|install FactoryBot|[LINK]()|
-|install Shoulda-matchers|[LINK]()|
+你可以在[這裡]()看見和本單元相關的程式碼
