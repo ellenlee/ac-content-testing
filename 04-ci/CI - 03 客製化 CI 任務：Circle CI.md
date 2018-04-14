@@ -2,11 +2,11 @@
 
 ### 客製化任務
 
-上個單元我們用的 Rollbar 服務和 GitHub 已經有很好的整合，我們可以很容易地為專案設定任務，讓我們的開發過程更完整和流暢。
+上個單元我們用的 Rollbar 服務和 GitHub 已經有很好的整合，我們可以很容易地為專案設定任務，讓我們的開發過程更完整和流暢。
 
-然而，有時候你的需求比較複雜，可能需要導入客製化的任務。舉例來說，在每個 branch 推上線之後，為了減少新的代碼在實際部署到 production 後可能會發生的問題，我們希望能夠先在一個模擬的環境中，把 app 跑起來試試看。我們還希望能在這個模擬環境裡跑測試，甚至 build docker image。
+然而，有時候你的需求比較複雜，可能需要導入客製化的任務。舉例來說，在每個 branch 推上線之後，為了減少新的代碼在實際部署到 production 後可能會發生的問題，我們希望能夠先在一個模擬的環境中，把 app 跑起來試試看。我們還希望能在這個模擬環境裡跑測試，甚至 build docker image。
 
-上述任務需要透過客製化的 CI 任務來達成。接下來我們會以 Circle CI 為例，示範如何在 Circle CI 上執行 RSpec。
+上述任務需要透過客製化的 CI 任務來達成。接下來我們會以 Circle CI 為例，示範如何在 Circle CI 上執行 RSpec。
 
 <br>
 
@@ -48,7 +48,7 @@
 
 接下來我們要撰寫自己的 **circle.yml**， Circle CI 的 Server 會用這個檔案裡面的內容，決定之後每一次執行的環境和指令。在照著 `Next Steps` 操作之前，我們必須先建立適合自己專案的 **.circleci/config.yml**。
 
-依照每個人的需求不同，設定檔也會不同，以下提供參考：
+依照每個人的需求不同，設定檔也會不同，以下提供參考：
 
 <pre style="background:#f9f9f9;color:#080808">
 version: 2
@@ -129,7 +129,7 @@ jobs:
 
 ### 運用 CI 來管理程式碼
 
-接下來就可以透過 CI 來維護程式碼了。只要記得把代碼推上 GitHub，Github 就會主動通知 Circle CI。終於，在無數次的失敗之後，我們成功了！可以看到狀態從紅色的 `FAILED` 轉變成綠色的 `FIXED`。
+接下來就可以透過 CI 來維護程式碼了。只要記得把代碼推上 GitHub，Github 就會主動通知 Circle CI。終於，在無數次的失敗之後，我們成功了！可以看到狀態從紅色的 `FAILED` 轉變成綠色的 `FIXED`。
 
 <div style="width:100%"> <img style="max-width:700px;width:100%;" src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/2505/CI-0305.png"></div>
 
@@ -139,14 +139,14 @@ jobs:
 
 <div style="width:100%"> <img style="max-width:700px;width:100%;" src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/2506/CI-0306.png"></div>
 
-以上是 Circle CI 的安裝說明，希望透過 Circle CI 的安裝與設定，能讓你感受到什麼是「客製化任務」。
+以上是 Circle CI 的安裝說明，希望透過 Circle CI 的安裝與設定，能讓你感受到什麼是「客製化任務」。
 
 <br>
 
 ### 參考程式碼
 
 <div style="background: #fbec9c; padding: 15px; border-radius: 10px">
-  本單元裡的程式碼可以在<a href="https://github.com/frozenfung/ci-sample" target="_blank">這裡</a>找到。
+  本單元裡的程式碼可以在<a href="https://github.com/frozenfung/ci-sample" target="_blank">這裡</a>找到。
 </div>
 
 
