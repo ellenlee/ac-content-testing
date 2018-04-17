@@ -1,15 +1,15 @@
 ## 專案與工具準備
 > 認識實務上會和 RSpec 搭配的套件，並完成套件設定
 
-在之前 TDD 相關的單元裡面，我們已經蠻詳盡的介紹 TDD 的用法和好處，也圍繞著冷氣遙控器舉了幾個例子。在接下來的幾個單元，我們會針對 Rails 討論測試的概念，並且搭配實務工具來撰寫測試。
+在接下來的幾個單元，我們會討論如何把 RSpec 和 Rails 搭配在一起，並介紹實務上寫測試時會搭配的常用工具。
 
-在這個單元裡，我們會先介紹實務上寫測試時會搭配的常用工具，這些工具的目的是幫助工程師能更加方便地撰寫、維護測試，請你先把工具安裝好，至於工具的使用方法和細節，之後會一邊實作、一邊展示。
+在這個單元裡，我們會先把工具一口氣安裝好，這些工具的目的是幫助工程師能更加方便地撰寫、維護測試，請你先把工具安裝好，至於工具的使用方法和細節，之後會一邊實作、一邊展示。
 
 ### 專案準備：餐廳論壇
 
 本課程的展示，會以你之前完成的「餐廳論壇」為出發點，教你怎麼把既有的功能加上測試。
 
-你可以選擇下載[我們準備的示範專案](https://github.com/ALPHACamp/restaurant-forum-testing)，也可以選擇打開你自己的專案成果。
+你可以選擇下載[我們準備的示範專案](https://github.com/ALPHACamp/restaurant-forum-3)，也可以選擇打開你自己的專案成果。
 
 ### 安裝 RSpec
 
@@ -203,22 +203,6 @@ end
 ```
 *Path: spec/rails_helper.rb*
 
-
-現在你可以使用更直覺的方式做測試，像是測試 user.name 的 validation：
-
-```ruby
-RSpec.describe User, type: :model do
-  it { should validate_presence_of(:name) }
-end
-```
-
-或是測試兩個 model 之間的關聯：
-
-```ruby
-RSpec.describe User, type: :model do
-  it { should have_many(:restaurants) }
-end
-```
 
 ### Devise 登入/登出 API 設定
 在測試的許多情境裡面常常都會需要讓使用者登入或是登出，以順利完成後續的行為。為了讓我們在測試的程式裡面也能夠自在的呼叫 Devise 的登入/登出 API，我們需要下列的設定：
