@@ -12,5 +12,5 @@
 - 應該要為 private method 寫測試
 - 不需要為 private method 寫測試
 
-ans: 1
-hint: <mark>需要阿鋒補充</mark>
+ans: 不需要為 private method 寫測試
+hint: private method 經常被各個 public method 所運用，通常我們會直接在 public method 裡面呼叫，當我們測試 public method 的時候也同時在測試 private method 了，不需要特別為 private method 寫測試。
