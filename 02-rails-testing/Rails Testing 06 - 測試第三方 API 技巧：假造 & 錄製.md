@@ -4,7 +4,7 @@
 
 到目前為止，我們透過了基礎的功能練習了許多 RSpec 的寫法。這個單元，我們將針對第三方 API 的測試，討論在處理第三方 API 時，會遇到什麼特殊的問題，又有什麼對應的解法。
 
-### 為什麼第三方 API 需要處理
+### 為什麼第三方 API 需要刻意處理
 
 仔細觀察近年來建立的網站，你會發現大量使用第三方 API 的現象，從社群登入（Google、Facebook 登入），到金流串接都屬於第三方 API 的範疇。
 
@@ -18,7 +18,7 @@
 - **假造**
 - **錄製**
 
-接下來我們會示範這兩個觀念的實作，我們會使用「Facebook 登入」做為第三方 API 的例子。
+接下來我們會延續上個單元的「Facebook 登入」，示範這兩個觀念的實作。
 
 ### 第三方 API 假造
 
@@ -27,6 +27,8 @@
 2. 阻擋相關的 API 發送。
 3. 回傳我們在第一步創造的假回應。
 
+#### 安裝與設定
+
 我們需要安裝 [Webmock](https://github.com/bblimke/webmock) 這個 gem 來幫助我們完成接下來的任務：
 
 ```ruby
@@ -34,7 +36,7 @@
 gem 'webmock'
 ```
 
-並且在 `spec_helper.rb` 裡面阻擋 API 發送：
+在 `spec_helper.rb` 裡面設定阻擋 API 發送：
 
 ```ruby
 # spec/spec_helper.rb
@@ -43,77 +45,100 @@ require 'webmock/rspec'
 WebMock.disable_net_connect!(allow_localhost: true)
 ```
 
-撰寫 `models/user.rb`，在安裝 FB 裡面其中關於 `self.get_facebook_user_data` 的測試：
+#### 補完 get_facebook_user_data 實作
+
+補完上個單元沒有寫完的 `User.get_facebook_user_data()`，內容是向 Facebook Graph API 發出請求，以權杖來要求回傳臉書的使用者資訊，若請求成功，此方法會回傳臉書資訊內容，否則回傳 `nil`：
+
+```ruby
+# app/models/user.rb
+
+def self.get_facebook_user_data(access_token)
+  conn = Faraday.new(url: 'https://graph.facebook.com')
+  response = conn.get "/me", { access_token: access_token }
+  data = JSON.parse(response.body)
+
+  if response.status == 200
+    data
+  else
+    Rails.logger.warn(data)
+    nil
+  end
+end
+```
+
+[Faraday](https://github.com/lostisland/faraday#api-documentation) 為筆者習慣用來發送 Request 的 HTTP Client。
+
+####撰寫測試
+
+接著我們撰寫關於 `self.get_facebook_user_data` 的測試：
 
 ```ruby
 # spec/models/user_spec.rb
 
 RSpec.describe User, type: :model do
   it "should get_facebook_user_data work(webmock version)" do
-    expect(User.get_facebook_user_data(ACCESS_TOKEN)).to eq({
+    # need to replace ACCESS_TOKEN to you fb access token
+    expect(User.get_facebook_user_data("ACCESS_TOKEN")).to eq({
       "id" => "FB_UID",
       "name" => "FB_NAME"
     })
   end
 end
 ```
+此時你需要將權仗加入程式碼，建立你直接建立 **config/facebook.yml** 來管理權杖資訊，並將該檔案加入 **.gitignore**，避免之後不小心把權杖寫進 GitHub。至於權杖的取得方法，請前往 facebook for developers 的[圖形 API 測試工具](https://developers.facebook.com/tools/explorer/?method=GET&path=me%3Ffields%3Did%2Cname&version=v2.12)，登入後取得權杖。
 
-在跑這個測試之前，我們必須先前往 Facebook 的圖形 API 測試工具，產生授權的權杖，請你前往 facebook for developers 的[圖形 API 測試工具](https://developers.facebook.com/tools/explorer/?method=GET&path=me%3Ffields%3Did%2Cname&version=v2.12) ，登入 Facebook 就可以看到自己的權杖：
+另外，預期回傳的資訊是 `"id"` 和 `"name"`，這也是來自[圖形 API 測試工具](https://developers.facebook.com/tools/explorer/?method=GET&path=me%3Ffields%3Did%2Cname&version=v2.12)頁面上的設定。
 
 ![img](images/fb-token.png)
 
-權杖是一組由大小寫英文以及數字組成、長達 200 個字左右的字串。請你把上文程式碼裡的 `ACCESS_TOKEN` 用剛剛拿到的權杖替換，接者我們執行 `bundle exec rspec` 跑測試，會看到類似以下的錯誤訊息:
+處理好權杖以後，執行 `bundle exec rspec` 跑測試，預期會看到類似以下的錯誤訊息：
 
-```
- Failure/Error: response = conn.get "/me", { access_token: access_token }
+![img](images/webmock-red.png)
 
- WebMock::NetConnectNotAllowedError:
-   Real HTTP connections are disabled. Unregistered request: GET https://graph.facebook.com/me?access_token=access_token with headers {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Faraday v0.12.2'}
+這段錯誤訊息嘗試告訴我們，我們想要發送的請求已經被 webmock 擋下來，沒有真的發送。接著我們要偽造假回應，你會發現 webmock 已經把假造的格式幫我們準備好了。
 
-   You can stub this request with the following snippet:
+請在錯誤訊息的下半部找到 `You can stub this request with the following snippet:` 這句話，這句話之後是 webmock 幫你做好的假回應，請你去 **spec/spec_helper.rb** 新增設定：
 
-   stub_request(:get, "https://graph.facebook.com/me?access_token=access_token").
-     with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Faraday v0.12.2'}).
-     to_return(:status => 200, :body => "", :headers => {})
-```
-
-這段錯誤訊息嘗試告訴我們，我們想要發送的請求已經被 webmock 擋下來沒有真的發送。接著我們要偽造假回應，你會發現 webmock 已經把假造的格式幫我們準備好了。看到上面錯誤訊息的下半部，從 `You can stub this request with the following snippet:` 這行開始，接著我們需要調整 response body ，換成我們自己的 `FB_UID` 和 `FB_NAME`。
-
-原本的格式應該是
-`to_return(:status => 200, :body => "", :headers => {})`
-
-把 body 換成實際回傳的內容
-`to_return(status: 200, body: '{"id":"FB_UID", "name": "FB_NAME"}', headers: {})`
-
-假回應就完成了，接著我們把假回應放在測試的設定檔案中:
-
-```
+```ruby
 # spec/spec_helper.rb
 
   config.before(:each) do
-    stub_request(:get, "https://graph.facebook.com/me?access_token=access_token").
+    # need to replace ACCESS_TOKEN to you fb access token
+    stub_request(:get, "https://graph.facebook.com/me?access_token=ACCESS_TOKEN").
       with(headers: {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Faraday v0.12.2'}).
       to_return(status: 200, body: '{"id":"FB_UID", "name": "FB_NAME"}', headers: {})
   end
 ```
 
-再執行一次測試，通過！
+唯一需要調整的地方是，webmock 訊息裡原本是 `to_return(:status => 200, :body => "", :headers => {})`，需要把 `body` 的內容換成和測試案例裡一致的內容： `to_return(status: 200, body: '{"id":"FB_UID", "name": "FB_NAME"}', headers: {})`。
+
+如此一來，假回應就完成了！此時可以再執行一次測試 `bundle exec rspec`，預期會看見綠燈通過！
 
 
 ### 第三方 API 錄製
 
-第二個技巧是 **第三方 API 錄製**，我們將透過 [vcr](https://github.com/vcr/vcr) 這個 gem 幫我們完成錄製的任務。第一次我們會真的發送請求到實際的伺服器，而這時 VCR 會幫我們把回傳的結果紀錄在一隻 yml 檔案裡面，之後針對同樣的網址和參數的請求就不會真的發送請求，而是用之前紀錄的 yml 檔案。
+第二個技巧是 **第三方 API 錄製**，我們將透過 [vcr](https://github.com/vcr/vcr) 這個 gem 幫我們完成錄製的任務。
 
-你需要先安裝 vcr gem：
+使用錄製技巧時，第一次會真的發送請求到第三方 API 的伺服器，此時 VCR 把回傳結果錄製下來，存成一支 yml 檔案，之後，要針對同樣的網址和參數進行請求，就不再需要發送請求，而可以引用這支 yml 檔案的內容。
+
+「假造」和「錄製」技巧不會同時使用，因此，在練習本內容時，你需要清掉上一步驟的實作內容。
+
+過程中會用到 vcr gem 和 webmock gem：
 
 ```ruby
 # Gemfile
 gem 'vcr'
+gem 'webmock'
 ```
 
-在 `spec/support/vcr_setup.rb` 撰寫設定檔：
+```bash
+[~/restaurant_forum] $ bundle install
+```
 
+撰寫設定檔：
 ```ruby
+# spec/support/vcr_setup.rb
+
 VCR.configure do |config|
   # 設定儲存 API 檔案的目錄位置
   config.cassette_library_dir = "spec/fixtures/vcr"
@@ -122,16 +147,21 @@ VCR.configure do |config|
 end
 ```
 
-在 `spec/rails_helper.rb` 導入 `vcr` 設定檔：
+導入 `vcr` 設定檔：
 
 ```ruby
+# spec/rails_helper.rb
 require 'support/vcr_setup'
 ```
 
-然後撰寫錄製的測試檔：
+然後撰寫錄製的測試檔，請注意你需要把 webmock version 的測試替換掉：
 
 ```ruby
+# spec/models/user_spec.rb
+
 RSpec.describe User, type: :model do
+  # other examples
+
   it "should get_facebook_user_data work(vcr version)" do
     VCR.use_cassette 'get facebook user data' do
       expect(User.get_facebook_user_data('ACCESS_TOKEN')).to eq({
@@ -143,14 +173,14 @@ RSpec.describe User, type: :model do
 end
 ```
 
-跑完測試後，可以發現在 `spec/vcr` 這個資料夾下面多了一隻名為 `get_facebook_user_data.yml` 的檔案，裡面的內容大概會是這樣，記錄了一切重製這個請求所需要的資訊：
+執行 `bundle exec rspec` 跑測試，預期會出現 Failure，但同時跑完測試後，你會在 `spec/vcr` 資料夾裡發現多了一隻名為 `get_facebook_user_data.yml` 的檔案，裡面的內容大概會是這樣，記錄了一切重製這個請求所需要的資訊：
 
 ```
 ---
 http_interactions:
 - request:
     method: get
-    uri: https://graph.facebook.com/me?access_token=EAACEdEose0cBAOnZBPUb0EuX8xgnHpoa9JKpeCLAWqdLQGrMjn1X2eaiZCFVOnveXrd4LY8F3JBK5zIsFu3inllfTs54MCiz5NRAIxlZCOLJU9SEQxBSh6gtSbKT5hG15A1WtsgZBiqOhvnFDVwUKxDz6Qf7mc17OPuh437qPXyZBf7fEX4cihDm5EJtD6mQZD&fields=email
+    uri: https://graph.facebook.com/me?access_token=ACCESS_TOKEN
     body:
       encoding: US-ASCII
       string: ''
@@ -198,12 +228,12 @@ http_interactions:
       - '60'
     body:
       encoding: UTF-8
-      string: '{"email":"frozenfung\u0040gmail.com","id":"962045113809238"}'
+      string: '{"email":"YOUR_FB_EMAIL","id":"YOUR_FB_ID"}'
     http_version:
   recorded_at: Tue, 03 Apr 2018 05:41:45 GMT
 recorded_with: VCR 3.0.3
 ```
-如果成功看見這個檔案，就表示你成功完成了錄製的任務。
+如果成功看見這個檔案，就表示你成功完成了錄製的任務，之後要針對同樣的網址和參數進行請求，就可以引用這支 yml 檔案的內容。
 
 ### 小結
 
