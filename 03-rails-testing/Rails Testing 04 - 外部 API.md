@@ -42,6 +42,7 @@ WebMock.disable_net_connect!(allow_localhost: true)
 ```
 
 撰寫 `models/user.rb`，在安裝 FB 裡面其中關於 `self.get_facebook_user_data` 的測試：
+
 ```ruby
 # spec/models/user_spec.rb
 
@@ -113,7 +114,7 @@ gem 'vcr'
 ```ruby
 VCR.configure do |config|
   # 設定儲存 API 檔案的目錄位置
-  config.cassette_library_dir = "fixtures/vcr"
+  config.cassette_library_dir = "spec/fixtures/vcr"
   # 設定假造 API 的函式庫
   config.hook_into :webmock
 end

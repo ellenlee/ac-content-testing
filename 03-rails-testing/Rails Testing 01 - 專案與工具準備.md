@@ -233,6 +233,14 @@ config.include Devise::Test::ControllerHelpers, :type => :controller
 
 之後我們就能在測試的程式裡面使用 `sign_in user` 和 `sign_out`
 
+### 設定測試資料庫
+
+最後一步，把目前專案資料庫的設定從開發環境複製一份到測試的環境：
+
+```
+rails db:migrate RAILS_ENV=test
+```
+
 現在我們裝好了寫測試的工具，接下來要進入實作了！
 
 ---
