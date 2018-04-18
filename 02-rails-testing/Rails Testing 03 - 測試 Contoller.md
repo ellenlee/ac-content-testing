@@ -1,6 +1,7 @@
 ## 測試 Controller
-> 能夠在 Rails 裡使用 RSpec 進行 Controller 測試
-> 能夠使用 TDD 開發流程完成功能
+> 能夠撰寫測試確保 controller action 的預期流程
+> 能夠撰寫測試確保 controller action 的指定變數
+> 能夠撰寫測試確保 template 的必要資訊
 
 延續著上個單元，到現在為止，我們還沒有定義 **/about** 的 controller action，按照 TDD 的開發流程，一樣我們先從測試開始。
 
@@ -49,9 +50,11 @@ end
 
 考慮到這是一個需要登入的路徑，我們需要先創造一個使用者，並且用這個使用者的身份登入，也就是 `sign_in(create(:user))`。之前我已經在 **spec/rails_helper.rb** 裡引入了 Devise，所以可以使用 Devise 提供的 `sign_in` 方法。
 
-接著我們要偽造 `get_user_count` 的回傳結果，原因是我們在上一個 model 的例子裡面已經寫過它的測試，所以我們可以相信 `get_user_count` 回傳的結果。而為了保持測試是一個獨立的單元，我們希望盡量不要讓其他因素影響到這個測試，所以我們會用偽造的方式處理。
+接著我們要偽造 `get_user_count` 的回傳結果，原因是我們在上一個 model 的例子裡面已經寫過它的測試，所以我們可以相信 `get_user_count` 回傳的結果。為了保持測試是一個獨立的單元，我們希望盡量不要讓其他因素影響到這個測試，所以我們會用偽造的方式處理。
 
 所謂「偽造的方式」，就是透過 `user_count = rand(20..100)` 來偽造使用者的人數，並且用 `allow(User).to receive(:get_user_count).and_return(user_count)` 嘗試偽造 `get_user_count` 的結果。
+
+`allow(A).to receive(B).with(C).and_return(D)` 是表達「預期 A 物件會收到 B 方法與 C 參數，然後 A 物件會回傳 D」，
 
 #### 測試
 
@@ -64,7 +67,7 @@ end
 此時我們還沒有在 controller 裡面加上對應的程式，但我們先執行測試看看，你可以在指令後加上檔名，只跑單一檔案的測試，來提高效率：
 
 ```bash
-[~/restaurant_forum] $ bundle exec rspec ./spec/controller/restaurants_controller_spec.rb
+[~/restaurant_forum] $ bundle exec rspec ./spec/controllers/restaurants_controller_spec.rb
 ```
 
 預期會出現 failure，表示該測試不通過，失敗原因是找不到 `user_count` 的值，然而因為根本就還沒有 controller action，所以自然也測不到該變數值：
@@ -98,12 +101,20 @@ end
 
 ![images](images/09-get-about-green.png)
 
-恭喜你！TDD 開發成功！
+恭喜你開發成功！
 
-希望經過以上的命名，你已經熟悉在 Rails 裡面開發 TDD 的感覺，拆解 API 和命名其實是很主觀的，如果你有想到什麼更好的拆解方式或是命名方式，請多上討論區跟同學們分享與討論。
+希望經過以上的命名，你已經熟悉在 Rails 裡面搭配 RSpec 測試框架開發的感覺，拆解 API 和命名其實是很主觀的，如果你有想到什麼更好的拆解方式或是命名方式，請多上討論區跟同學們分享與討論。
 
-### 參考資源
-在實際測試時，根據你設計的測試，需要查詢更多 RSpec 語法，可以參考：
+### Recap
+
+下個單元開始，我們會針對 Web API 的情境，討論如何測試以及相關技巧。在進入新主題之前，在此先總結一下目前的學習，目前我們用了較簡單的例子去示範 model 和 controller 測試，希望能讓同學熟悉在 Rails 裡寫測試的手感。
+
+接下來重要的就是鼓勵同學回到自己的專案裡去寫測試，一開始的重點不是追求測試覆蓋率，建議的起手點如下：
+- 從習慣寫 model spec 開始，因為粒度最小、也最重要
+- 測試你最擔心出錯的部分，把以前手動去檢查的行為，改成寫測試去檢查
+- 開發時遇到 bug 時，撰寫單元測試來揭發該 bug，再進行 debug
+
+建議可以先瀏覽一輪 [rspec-rails 文件](https://github.com/rspec/rspec-rails#contributing)，掌握可能的寫法，需要用到時再 Google 查詢，常用的有兩個參考資源：
 - rspec-rails 文件：https://github.com/rspec/rspec-rails#contributing
 - Relish：https://relishapp.com/rspec/rspec-rails/v/3-7/docs/matchers
 
@@ -111,4 +122,4 @@ end
 
 | Commit | GitHub |
 |:----- | ----- |
-| GET about check we have user count info in view template | LINK |
+| GET about check we have user count info in view template | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/dc1325114726a5dfa553e8ce83e72510be8de9c0) |
