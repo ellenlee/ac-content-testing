@@ -181,3 +181,9 @@ end
 此時，你可以執行 `bundle exec rspec`，會發現雖然我們根本沒有撰寫 `User.get_facebook_user_data()` 和 `User.from_omniauth()` 的內容，在經過一連串的偽造資料後，可以通過測試。
 
 下個單元，我們會進一步講解「偽造」和「錄製」的技巧。
+
+| Commit | GitHub |
+|:----- | ----- |
+| Facebook login setup | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/3787d3b21e55e6d6ee24a00aa2c9b56343748a74) |
+| Accomplish Facebook login spec | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/e25804f181c9abd46a7cbed02adf3b876adb7603) |
+| Implement Facebook login | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/4e493a4313b85c52088d8721ecfedc20079c2111) |

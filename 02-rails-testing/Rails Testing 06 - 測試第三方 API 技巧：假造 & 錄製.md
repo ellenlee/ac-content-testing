@@ -245,5 +245,5 @@ recorded_with: VCR 3.0.3
 
 | 主題 | 說明 |
 | ----- | ----- |
-| 假造|[LINK](https://github.com/ALPHACamp/photo-album-testing/commit/10b260e702842f1228cf2890c123740eb29f6ff5)|
-|錄製|[LINK](https://github.com/ALPHACamp/photo-album-testing/commit/61de9112d8b43634579c4137f3082e60b8b4d825)|
+| 假造|[LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/3190433586073d8a35234118ca2e4593c8617775)|
+|錄製|[LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/cfe13419088881ab80b2e98cc4d9f9329a4c6dd4)|

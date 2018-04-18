@@ -2,7 +2,7 @@
 > 能夠為 Devise 的登入、登出功能撰寫測試
 > 能夠為 FB 登入功能撰寫測試
 
-在前面的單元，我們使用「餐廳論壇」結合 TDD 完成了基礎功能的實作。在這個單元，我們會展示如何進行 Web API 的測試。
+在前面的單元，我們使用「餐廳論壇」結合測試完成了基礎功能的實作。在這個單元，我們會展示如何進行 Web API 的測試。
 
 我們會用「Email 登入/登出」的功能做展示，功能實作的流程如同在【[Web API > 使用者認證](https://lighthouse.alphacamp.co/lessons/236/)】的設計，只是這次要在實作的同時加上 RSpec：
 
@@ -13,6 +13,8 @@
 ### 準備專案
 
 由於本單元的內容會同時處理 Web API 的實作與測試，以下提供一個練習用的餐廳論壇專案，建議你先直接 `git clone` 示範專案來進行練習，有了完整的體驗之後，再回到自己的專案上進行 Web API 開發。
+
+示範專案下載位址：https://github.com/ALPHACamp/restaurant-forum-testing-base
 
 你可以參看示範專案的 commit 記錄來理解專案現狀，除了完整延續【餐廳論壇】系列內容外，該專案預先做了以下事情：
 
@@ -174,6 +176,6 @@ end
 
 | Commit | GitHub |
 |:----- | ----- |
-| preparation | LINK |
-| implement email login with spec | LINK |
-| implement email logout with spec | LINK |
+| preparation | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/32deae9987adb052f336c37109d7b7610adbd929) |
+| implement email login with spec | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/f311e7f211104044c82c77f9a6ab55e10cb9716b) |
+| implement email logout with spec | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/497c47b0c27f374a723f6a2ca2f9963212dae6ff) |

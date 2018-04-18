@@ -1,12 +1,11 @@
 ## 測試 Model
-> 能夠在 Rails 裡使用 RSpec 進行 Model 測試
-> 能夠使用 TDD 開發流程完成功能
+> 能夠撰寫測試確保 model 方法的預期結果
 
-在上個單元，你已經在你的「餐廳論壇」專案裡安裝了 RSpec 的相關環境，接下來，我們會跟隨 TDD 的開發原則，實作一個「關於本站」的頁面，在這個頁面裡會呈現全站統計數據，包括：
+在上個單元，你已經在你的「餐廳論壇」專案裡安裝了 RSpec 的相關環境，接下來，我們會實作一個「關於本站」的頁面，在這個頁面裡會呈現全站統計數據，包括：
 1. 全站有多少使用者
 2. 全站總共有多少回覆
 
-我們曾經在【[S16 主題論壇：強化功能 > 餐廳 Dashboard - restaurants#dashboard](https://lighthouse.alphacamp.co/units/496)】裡寫過一個 **/dashboard** 頁面，在本單元裡，由於要練習 TDD，我們會特地另外做一個 **/about** 來練習。
+我們曾經在【[S16 主題論壇：強化功能 > 餐廳 Dashboard - restaurants#dashboard](https://lighthouse.alphacamp.co/units/496)】裡寫過一個 **/dashboard** 頁面，在本單元裡，我們會特地另外做一個 **/about** 來練習。
 
 ### 定義期待結果
 
@@ -133,3 +132,12 @@ end
 ![images](images/06-user-comment-green.png)
 
 恭喜你完成了 Model 測試！在下一個單元，我們會繼續完成 Controller 的測試。
+
+
+### 參考程式碼
+
+| Commit | GitHub |
+|:----- | ----- |
+| add route /about | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/6ea5bf28b1238631269455fce4cee9bc4531a9da) |
+| User should count all user | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/7a5237ebdfd209d5fc81b99184b571cc4f48d920) |
+| User should count all comments by this user | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/bc77445169048f5aad29033d3e65eb9436970ba0) |
