@@ -64,7 +64,7 @@ end
 此時我們還沒有在 controller 裡面加上對應的程式，但我們先執行測試看看，你可以在指令後加上檔名，只跑單一檔案的測試，來提高效率：
 
 ```bash
-[~/restaurant_forum] $ bundle exec rspec ./spec/controller/restaurants_controller_spec.rb
+[~/restaurant_forum] $ bundle exec rspec ./spec/controllers/restaurants_controller_spec.rb
 ```
 
 預期會出現 failure，表示該測試不通過，失敗原因是找不到 `user_count` 的值，然而因為根本就還沒有 controller action，所以自然也測不到該變數值：
