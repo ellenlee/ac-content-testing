@@ -1,9 +1,9 @@
-## 從 MVC 角度理解
+## TDD 開發模擬 (3) 從 MVC 看測試
 > 理解 MVC 不同的測試要點
 
 在前兩個單元，我們為冷氣遙控器開發了「打開冷氣」功能，以此理解了 TDD 概念。在這個單元裡，我們要進一步加入 MVC 的概念來拆解程式架構。
 
-寫測試的時候，通常會依照 MVC 的架構分別撰寫不同層級的測試，重要性依序是 model >  controller > view。原因是 model 是邏輯上最不容易改變，卻又最關鍵的地方，而 view 比較常會改變，而且改變的內容通常不會太重要。
+之前提過，寫測試的時候，通常會依照 Rails 的架構分別撰寫不同層級的測試，從 MVC 來看的話，重要性依序是 model >  controller > view。原因是 model 是邏輯上最不容易改變，卻又最關鍵的地方，而 view 比較常會改變，而且改變的內容通常不會太重要。
 
 |          |  改動頻率  |  重要度  |  難易度   |  撰寫詳細度 |
 |----------|----------|----------|----------|-----------|
@@ -55,9 +55,10 @@ end
 
 ```ruby
 測試 "冷氣遙控器 按下 打開冷氣按鈕 能順利打開冷氣" do
-	假設 冷氣開啟狀態 為 靜止
-   冷氣遙控器.打開冷氣()
-   預期(冷氣狀態) == 運作中
+  設定「冷氣開啟狀態」 -> 關機
+  設定「冷氣開啟狀態」 -> 有插電
+  冷氣遙控器.打開冷氣()
+  預期(冷氣狀態) == 運作中
 end
 ```
 
@@ -91,6 +92,6 @@ end
 
 | 項目 | GitHub |
 | ----- | ----- |
-| Model 測試案例 | LINK |
-| Controller 測試案例 | LINK |
-| View 測試案例 | LINK |
+| Model 測試案例 | [LINK](https://github.com/ALPHACamp/air-conditioner/commit/e584d5731213ea4228d20ecc0a8842fe0ad9e6cb) |
+| Controller 測試案例 | [LINK](https://github.com/ALPHACamp/air-conditioner/commit/1e2a9df696f0312868f143c9c5efb3c8a2ba6820) |
+| View 測試案例 | [LINK](https://github.com/ALPHACamp/air-conditioner/commit/613d004b47ca31ac38b771e0dab571ab4f74988d) |
