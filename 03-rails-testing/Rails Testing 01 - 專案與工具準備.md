@@ -1,23 +1,50 @@
 >**學習成果與目標**
+>・認識 Rails 框架下的測試分類，能夠著手為自己的專案加上測試
 >・認識實務上會和 RSpec 搭配的套件，並完成套件設定
 
 <hr style="border-top: 2px solid #eee">
 
-在之前 TDD 相關的單元裡面，我們已經蠻詳盡的介紹 TDD 的用法和好處，也圍繞著冷氣遙控器舉了幾個例子。在接下來的幾個單元，我們會針對 Rails 討論測試的概念，並且搭配實務工具來撰寫測試。
-
-在這個單元裡，我們會先介紹實務上寫測試時會搭配的常用工具，這些工具的目的是幫助工程師能更加方便地撰寫、維護測試，請你先把工具安裝好，至於工具的使用方法和細節，之後會一邊實作、一邊展示。
+在接下來的幾個單元，我們會討論如何把 RSpec 和 Rails 搭配在一起，並介紹實務上寫測試時會搭配的常用工具。
 
 <br>
 
-### 專案準備：餐廳論壇
+### Rspec + Rails
+
+在 Rails 裡寫測試時，通常會搭配 Rails 框架的架構，去思考不同層級的測試，因而產生以下光譜：
+
+<div style="width:100%"> <img style="max-width:700px;width:100%;" src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/2540/rails-test-type.png"></div>
+
+<br>
+
+每一個人撰寫測試的原則和習慣都略有不同，原則上的區分可能是：
+
+* Model specs：測試 model method 的預期行為
+* Helper specs：類似 model 測試，去測試 helper method 的預期行為
+* Controller specs：測試 action 流程、指定變數
+* Routing specs：測試路徑與元件之間的連結
+* View specs：將 render 的行為從 controller 測試區分出來
+* Request specs：和 controller spec 有點像，通常拿來測試 Web API 發出 request 後的預期 response
+* Feature specs：適合測試 HTML 網頁，需搭配 capybara gem 使用
+
+筆者的習慣是「model > helper > controller > request > feature > view」，從範圍小的著手、再往範圍較大的測試推進。
+
+如果同學在學習本章節後，要開始為自己的專案加上測試，建議同學可以從 Model 方法的單元測試開始建立習慣，原因是因為 Model 是邏輯上最不容易改變，卻又最關鍵的地方，而 view 比較常會改變，而且改變的內容通常不會太重要。
+
+接下來的幾個單元，我們會先以簡單的範例示範 Model 測試與 Controller 測試，進一步延伸到 Web API 的 Controller 測試以及相關處理技巧。
+
+在這個單元裡，我們會先把工具一口氣安裝好，這些工具的目的是幫助工程師能更加方便地撰寫、維護測試，請你先把工具安裝好，至於工具的使用方法和細節，之後會一邊實作、一邊展示。
+
+<br>
+
+### 準備練習用專案：餐廳論壇
 
 本課程的展示，會以你之前完成的「餐廳論壇」為出發點，教你怎麼把既有的功能加上測試。
 
-你可以選擇下載[我們準備的示範專案](https://github.com/ALPHACamp/restaurant-forum-testing)，也可以選擇打開你自己的專案成果。
+你可以選擇下載[我們準備的示範專案](https://github.com/ALPHACamp/restaurant-forum-3)，也可以選擇打開你自己的專案成果。
 
 <br>
 
-### 安裝 RSpec
+#### 安裝 RSpec
 
 在正式開始之前，我們需要安裝一些需要的工具，加速我們撰寫測試的過程。
 
@@ -83,7 +110,7 @@
 
 <br>
 
-### 安裝 FactoryBot
+#### 安裝 FactoryBot
 
 撰寫測試時，由於每個 `it` 是獨立的，因此每次都要重新建立測試用的假資料，你現在已經知道可以用 `before` 的方法來做一次性的宣告。然而，當 Model 之間的關聯變得複雜時，資料建置就會愈來愈麻煩。因此，實務上會搭配 FactoryBot 這個函式庫，用來快速產生假資料，可以省下很多準備資料的時間。
 
@@ -176,7 +203,7 @@
 
 <br>
 
-### 安裝 rails-controller-testing
+#### 安裝 rails-controller-testing
 
 [rails-controller-testing](https://github.com/rails/rails-controller-testing) 是一個 RSpec 的輔助套件，他提供兩個功能分別是 `assigns` 和 `assert_template`。`assigns` 能幫我們提供取得傳進去 view 的 instance variable 的值，而 `assert_template` 能幫我們確認 view 有沒有被正確的 render，詳細的教學請參考[官方的使用手冊](https://github.com/rails/rails-controller-testing#usage)。
 
@@ -191,7 +218,7 @@
 
 <br>
 
-### 安裝 database_cleaner
+#### 安裝 database_cleaner
 
 [database_cleaner](https://github.com/DatabaseCleaner/database_cleaner) 是一個 RSpec 的輔助套件，他能夠幫助你在每次測試開始之前建立一個乾淨的環境，讓你每次測試的狀態不受之前測試的過程影響，增加測試執行的正確率。
 
@@ -230,7 +257,7 @@
 
 <br>
 
-### 安裝 Shoulda-matchers
+#### 安裝 Shoulda-matchers
 
 [Shoulda-matchers](https://github.com/thoughtbot/shoulda-matchers) 是一個 RSpec 的補充包，裡面針對 `ActiveModel`、`ActiveRecord` 和 `ActionController` 的設定提供了方便的 API 來進行測試。
 
@@ -239,7 +266,7 @@
 <pre style="background:#f9f9f9;color:#080808">group <span style="color: #0000aa">:development</span>, <span style="color: #0000aa">:test</span> <span style="color: #0000aa">do</span>
   gem <span style="color: #aa5500">&#39;shoulda-matchers&#39;</span>, <span style="color: #aa5500">&#39;~&gt; 3.1&#39;</span>
 <span style="color: #0000aa">end</span>
-</pre></div>
+</pre>
 
 <span style="font-style: italic;color: #999;">Path: Gemfile</span>
 
@@ -271,25 +298,7 @@
 
 <br>
 
-現在你可以使用更直覺的方式做測試，像是測試 user.name 的 validation：
-
-<pre style="background:#f9f9f9;color:#080808"><span style="color: #aa0000">RSpec</span>.describe <span style="color: #aa0000">User</span>, <span style="color: #0000aa">type</span>: <span style="color: #0000aa">:model</span> <span style="color: #0000aa">do</span>
-  it { should validate_presence_of(<span style="color: #0000aa">:name</span>) }
-<span style="color: #0000aa">end</span>
-</pre>
-
-<br>
-
-或是測試兩個 model 之間的關聯：
-
-<pre style="background:#f9f9f9;color:#080808"><span style="color: #aa0000">RSpec</span>.describe <span style="color: #aa0000">User</span>, <span style="color: #0000aa">type</span>: <span style="color: #0000aa">:model</span> <span style="color: #0000aa">do</span>
-  it { should have_many(<span style="color: #0000aa">:restaurants</span>) }
-<span style="color: #0000aa">end</span>
-</pre>
-
-<br>
-
-### Devise 登入/登出 API 設定
+#### Devise 登入/登出 API 設定
 
 在測試的許多情境裡面常常都會需要讓使用者登入或是登出，以順利完成後續的行為。為了讓我們在測試的程式裡面也能夠自在的呼叫 Devise 的登入/登出 API，我們需要下列的設定：
 
@@ -305,6 +314,23 @@ config.include <span style="color: #0000aa">Devise</span>:<span style="color: #0
 
 之後我們就能在測試的程式裡面使用 `sign_in user` 和 `sign_out`
 
+<br>
+
+#### 設定測試資料庫
+
+最後一步，把目前專案資料庫的設定從開發環境複製一份到測試的環境：
+
+<div class='terminal-block'>
+  <div class='terminal-block-head'>Terminal</div>
+  <div class='terminal-block-body'>
+    <div class='terminal-code-line'>
+      <span class='terminal-path'>[~/restaurant_forum] </span><span class='terminal-command'>$ rails db:migrate RAILS_ENV=test</span>
+    </div>
+  </div>
+</div>
+
+<br>
+
 現在我們裝好了寫測試的工具，接下來要進入實作了！
 
 <br>
@@ -317,6 +343,10 @@ config.include <span style="color: #0000aa">Devise</span>:<span style="color: #0
 - FactoryBot：https://github.com/thoughtbot/factory_bot_rails
 - Shoulda-matchers：https://github.com/thoughtbot/shoulda-matchers
 
+<br>
+
 ### 參考程式碼
 
-你可以在[這裡]()看見和本單元相關的程式碼
+<div style="background: #fbec9c; padding: 15px; border-radius: 10px">
+  你可以在<a href="https://github.com/ALPHACamp/restaurant-forum-testing/commit/b7e4b16fe838641a2696b2f580655b7944af9ba3" target="_blank">這裡</a>看見和本單元相關的程式碼
+</div>

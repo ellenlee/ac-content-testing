@@ -5,7 +5,7 @@
 
 在前兩個單元，我們為冷氣遙控器開發了「打開冷氣」功能，以此理解了 TDD 概念。在這個單元裡，我們要進一步加入 MVC 的概念來拆解程式架構。
 
-寫測試的時候，通常會依照 MVC 的架構分別撰寫不同層級的測試，重要性依序是 model >  controller > view。原因是 model 是邏輯上最不容易改變，卻又最關鍵的地方，而 view 比較常會改變，而且改變的內容通常不會太重要。
+之前提過，寫測試的時候，通常會依照 Rails 的架構分別撰寫不同層級的測試，從 MVC 來看的話，重要性依序是 model > controller > view。原因是 model 是邏輯上最不容易改變，卻又最關鍵的地方，而 view 比較常會改變，而且改變的內容通常不會太重要。
 
 |          |  改動頻率  |  重要度  |  難易度   |  撰寫詳細度 |
 |----------|----------|----------|----------|-----------|
@@ -45,7 +45,9 @@
 
 <br>
 
-在上述的測試例子裡面，由我們自己定義「發送指令給冷氣」的回傳結果，以免測試的正確性受到外部因素影響。舉例來說，假設今天冷氣機的發射系統故障，而我們對於冷氣機的回傳結果不是我們自己定義，而是真的去跟冷氣機溝通，那麼我們將無法確定，跑測試的時候看見的紅燈，究竟是來自於冷氣機的第三方問題，還是我們寫的程式有錯。
+在上述的測試案例裡面，我們沒有直接去請冷氣要求回傳結果，而是自己在測試中假造了「發送指令給冷氣」的回傳結果，目的是避免測試的正確性受到外部因素影響，也就是「維持測試的單元性」的精神。
+
+舉例來說，假設今天冷氣機的發射系統故障，而我們在測試中要求冷氣機回傳結果，就會造成測試失敗，但這個測試案例是針對遙控器「判斷是否開啟」的功能運作，冷氣有沒有壞掉，並不是我們這個測試案例的重點。如果把「冷氣」這個外部因素混合進來，我們看到測試壞掉時，就無法精確的判斷有問題的地方是來自冷氣機、還是冷氣機遙控器。
 
 <br>
 
@@ -59,16 +61,17 @@
 
 組合起來，組成 controller 的完整測試：
 
-<pre style="background:#f9f9f9;color:#080808">測試 <span style="color: #aa5500">&quot;如果冷氣沒開，冷氣遙控器會發射開機訊號 &quot;</span> <span style="color: #0000aa">do</span>
+<pre style="background:#f9f9f9;color:#080808">測試 <span style="color: #aa5500">&quot;冷氣遙控器 按下 打開冷氣按鈕 能順利打開冷氣&quot;</span> <span style="color: #0000aa">do</span>
   設定紅外線發射器
   冷氣開啟狀態 -&gt; 沒開
   預期（假的紅外線）會（發射開機指令給冷氣）
 <span style="color: #0000aa">end</span>
 
 測試 <span style="color: #aa5500">&quot;如果冷氣已經開啟，冷氣遙控器不會發射開機訊號 &quot;</span> <span style="color: #0000aa">do</span>
-  設定紅外線發射器
-  冷氣開啟狀態 -&gt; 已開啟
-  預期（假的紅外線）不會（發射開機指令給冷氣）
+  設定「冷氣開啟狀態」 -&gt; 關機
+  設定「冷氣開啟狀態」 -&gt; 有插電
+  冷氣遙控器.打開冷氣()
+  預期(冷氣狀態) == 運作中
 <span style="color: #0000aa">end</span>
 </pre>
 
@@ -106,7 +109,7 @@ view 在冷氣遙控器裡面對應到儀表板 (dashboard)，負責顯示目前
 
 
 | 項目 | GitHub |
-| ----- | ----- |
-| Model 測試案例 | LINK |
-| Controller 測試案例 | LINK |
-| View 測試案例 | LINK |
+| :----- | :----- |
+| Model 測試案例 | [LINK](https://github.com/ALPHACamp/air-conditioner/commit/e584d5731213ea4228d20ecc0a8842fe0ad9e6cb) |
+| Controller 測試案例 | [LINK](https://github.com/ALPHACamp/air-conditioner/commit/1e2a9df696f0312868f143c9c5efb3c8a2ba6820) |
+| View 測試案例 | [LINK](https://github.com/ALPHACamp/air-conditioner/commit/613d004b47ca31ac38b771e0dab571ab4f74988d) |

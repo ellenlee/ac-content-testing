@@ -1,25 +1,18 @@
 >**學習成果與目標**
->・能夠在 Rails 裡使用 RSpec 進行 Model 測試
->・能夠使用 TDD 開發流程完成功能
+>・能夠撰寫測試確保 model 方法的預期結果
 
 <hr style="border-top: 2px solid #eee"> 
 
-在上個單元，你已經在你的「餐廳論壇」專案裡安裝了 RSpec 的相關環境，接下來，我們會跟隨 TDD 的開發原則，實作一個「關於本站」的頁面，在這個頁面裡會呈現全站統計數據，包括：
+在上個單元，你已經在你的「餐廳論壇」專案裡安裝了 RSpec 的相關環境，接下來，我們會實作一個「關於本站」的頁面，在這個頁面裡會呈現全站統計數據，包括：
 
 1. 全站有多少使用者
 2. 全站總共有多少回覆
 
-我們曾經在【[S16 主題論壇：強化功能 > 餐廳 Dashboard - restaurants#dashboard](https://lighthouse.alphacamp.co/units/496)】裡寫過一個 **/dashboard** 頁面，在本單元裡，由於要練習 TDD，我們會特地另外做一個 **/about** 來練習。
+我們曾經在【[S16 主題論壇：強化功能 > 餐廳 Dashboard - restaurants#dashboard](https://lighthouse.alphacamp.co/units/496)】裡寫過一個 **/dashboard** 頁面，在本單元裡，我們會特地另外做一個 **/about** 來練習。
 
 <br>
 
 ### 定義期待結果
-
-在一切開始之前，先複習一次 TDD 的流程：
-
-<div style="width:100%"> <img style="max-width:700px;width:100%;" src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/2479/red-green-refactor.png"></div>
-
-<br>
 
 #### 構思 API
 
@@ -54,8 +47,11 @@
 
 我們打算將這個頁面的 route 命名為 **/about**，我們預期呼叫 **/about** 的時候，回傳的 template 裡面帶有**全站使用者的數量**和**全站回覆的數量**的資訊。
 
-<pre style="background:#f9f9f9;color:#080808">collection <span style="color: #0000aa">do</span>
-  get <span style="color: #0000aa">:about</span>
+<pre style="background:#f9f9f9;color:#080808">resources <span style="color: #0000aa">:restaurants</span> <span style="color: #0000aa">do</span>
+  <span style="color: #aaaaaa; font-style: italic"># ...</span>
+  collection <span style="color: #0000aa">do</span>
+    get <span style="color: #0000aa">:about</span>
+  <span style="color: #0000aa">end</span>
 <span style="color: #0000aa">end</span>
 </pre>
 
@@ -71,7 +67,7 @@
 
 #### 查看全站使用者人數
 
-既然是 TDD，顧名思義，我們會先寫測試的程式，首先從 model 的 API 開始，請你在 **spec/models/user_spec.rb** 來撰寫測試案例（目錄與檔案需要手動新增）：
+首先從 model 的 API 開始，請你在 **spec/models/user_spec.rb** 來撰寫測試案例（目錄與檔案需要手動新增）：
 
 <pre style="background:#f9f9f9;color:#080808"><span style="color: #00aaaa">require</span> <span style="color: #aa5500">&#39;rails_helper&#39;</span>
 
@@ -92,7 +88,7 @@
 
 在這個測試案例中，我們先測試了 User 數量，此時測試環境下的資料庫裡面什麼都沒有，所以可以預期 user 的數量為零。
 
-接著我們透過 FactoryGirl 的 create API 創造一個 user `create(:user)`，呼叫 `create(:user)` 時，就會按我們之前在 `FactoryBot.define` 裡撰寫的設定，產生一個 `User` 物件：
+接著我們透過 FactoryBot 的 create API 創造一個 user `create(:user)`，呼叫 `create(:user)` 時，就會按我們之前在 `FactoryBot.define` 裡撰寫的設定，產生一個 `User` 物件。
 
 呼叫 `create(:user)` 之後，測試資料庫裡面應該會有只一個 user，我們透過 `expect` 來測試 API 的呼叫結果是不是跟我們預期的一樣，請你以 `bundle exec rspec` 執行測試，預期出現 `1 example, 1 failure`：
 
@@ -102,12 +98,12 @@
 
 請你仔細閱讀 RSpec 給你的 Failuer 報告，在執行「User should count all user」這個測試案例時，在執行 `expect(User.get_user_count).to eq(0)` 的時候發生錯誤，錯誤原因是沒有定義 `get_user_count` 這個方法。
 
-按照 TDD 的流程，現在我們要來寫 API 程式內容，涉法讓這個案例通過，請你在 `User` model 裡加入 `get_user_count` 方法:
+現在我們要來寫 API 程式內容，涉法讓這個案例通過，請你在 `User` model 裡加入 `get_user_count` 方法：
 
 <pre style="background:#f9f9f9;color:#080808"><span style="color: #0000aa">def</span> <span style="color: #00aa00; text-decoration: underline">self</span>.<span style="color: #00aa00">get_user_count</span>
   <span style="color: #aa0000">User</span>.all.size
 <span style="color: #0000aa">end</span>
-</pre></div>
+</pre>
 
 <span style="font-style: italic;color: #999;">Path: model/user.rb</span>
 
@@ -173,3 +169,13 @@
 <br>
 
 恭喜你完成了 Model 測試！在下一個單元，我們會繼續完成 Controller 的測試。
+
+<br>
+
+### 參考程式碼
+
+| Commit | GitHub |
+|:----- | :----- |
+| add route /about | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/6ea5bf28b1238631269455fce4cee9bc4531a9da) |
+| User should count all user | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/7a5237ebdfd209d5fc81b99184b571cc4f48d920) |
+| User should count all comments by this user | [LINK](https://github.com/ALPHACamp/restaurant-forum-testing/commit/bc77445169048f5aad29033d3e65eb9436970ba0) |
