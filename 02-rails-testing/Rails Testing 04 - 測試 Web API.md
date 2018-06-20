@@ -63,7 +63,7 @@ RSpec.describe Api::V1::AuthController, type: :controller do
     expect(response).to have_http_status(200)
     expect(JSON.parse(response.body)).to eq({
       'message' => 'ok',
-      'auth_token' => user.authentication_token,
+      'auth_token' => user.authentication_token
     })
   end
 end
